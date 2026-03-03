@@ -40,11 +40,11 @@ export function SignInForm() {
   };
 
   return (
-    <form className="space-y-5" onSubmit={onSubmit}>
+    <form className="space-y-6" onSubmit={onSubmit}>
       {error && <ErrorDisplay>{error}</ErrorDisplay>}
 
       <TextInput
-        label="Email"
+        label="Email address"
         type="email"
         placeholder="Enter your email"
         value={email}
@@ -52,17 +52,24 @@ export function SignInForm() {
         required
       />
 
-      <TextInput
-        label="Password"
-        type="password"
-        placeholder="Enter your password"
-        value={password}
-        onChange={setPassword}
-        required
-      />
+      <div>
+        <TextInput
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={setPassword}
+          required
+        />
+        <div className="mt-2 text-right">
+          <button type="button" className="text-sm text-primary-300 hover:text-primary-400 hover:underline">
+            Forgot password?
+          </button>
+        </div>
+      </div>
 
-      <FilledButton type="submit" loading={loading}>
-        Sign In
+      <FilledButton type="submit" loading={loading} className="!rounded-full py-2.5">
+        Log in
       </FilledButton>
     </form>
   );
