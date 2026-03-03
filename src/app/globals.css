@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+    /* FONT */
+    --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    /* BASE / BACKGROUND */
+    --color-background: #FAFAFA;
+
+    /* NEUTRAL */
+    --color-neutral-50: #FFFFFF;
+    --color-neutral-100: #F3F4F6;
+    --color-neutral-200: #E5E7EB;
+    --color-neutral-300: #6B7280;
+    --color-neutral-400: #374151;
+    --color-neutral-500: #111827;
+
+    /* PRIMARY */
+    --color-primary-50: #EFF6FF;
+    --color-primary-100: #BFDBFE;
+    --color-primary-200: #60A5FA;
+    --color-primary-300: #2563EB;
+    --color-primary-400: #1D4ED8;
+    --color-primary-500: #1E3A5F;
+
+    /* WARNING */
+    --color-warning-50: #FFFBEB;
+    --color-warning-100: #FEF3C7;
+    --color-warning-200: #FCD34D;
+    --color-warning-300: #F59E0B;
+    --color-warning-400: #D97706;
+    --color-warning-500: #92400E;
+
+    /* ERROR */
+    --color-error-50: #FEF2F2;
+    --color-error-100: #FEE2E2;
+    --color-error-200: #FCA5A5;
+    --color-error-300: #EF4444;
+    --color-error-400: #DC2626;
+    --color-error-500: #991B1B;
+
+    /* SUCCESS */
+    --color-success-50: #F0FDF4;
+    --color-success-100: #DCFCE7;
+    --color-success-200: #4ADE80;
+    --color-success-300: #22C55E;
+    --color-success-400: #16A34A;
+    --color-success-500: #166534;
+}
+
+@utility scrollbar-hide {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+:root {
+    --background: var(--color-background);
+    --foreground: var(--color-neutral-500);
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: var(--font-sans);
+}
