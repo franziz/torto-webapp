@@ -12,52 +12,6 @@ import { DataFailed } from "@/core/resources/data-state";
 import { ErrorCodes, ServerError } from "@/core/resources/server-error";
 import { PortfolioByAssetTypeEntity } from "@/features/portfolio/domain/entities/portfolio-by-asset-type";
 
-// TODO: Remove when backend deploys currency grouping for /api/portfolio/by-asset-type
-const USE_HARDCODED_ASSET_TYPE_DATA = true;
-
-const HARDCODED_DATA: PortfolioByAssetTypeEntity[] = [
-  new PortfolioByAssetTypeEntity({
-    assetTypeId: "hardcoded-stock-idr",
-    assetTypeCode: "STOCK",
-    assetTypeName: "Saham",
-    currency: "IDR",
-    totalCost: 150_000_000,
-    currentValue: 165_000_000,
-    unrealizedGain: 15_000_000,
-    realizedGain: 2_500_000,
-  }),
-  new PortfolioByAssetTypeEntity({
-    assetTypeId: "hardcoded-stock-sgd",
-    assetTypeCode: "STOCK",
-    assetTypeName: "Saham",
-    currency: "SGD",
-    totalCost: 5_000,
-    currentValue: 5_500,
-    unrealizedGain: 500,
-    realizedGain: 0,
-  }),
-  new PortfolioByAssetTypeEntity({
-    assetTypeId: "hardcoded-bond-idr",
-    assetTypeCode: "BOND",
-    assetTypeName: "Obligasi",
-    currency: "IDR",
-    totalCost: 50_000_000,
-    currentValue: 52_000_000,
-    unrealizedGain: 2_000_000,
-    realizedGain: 1_000_000,
-  }),
-  new PortfolioByAssetTypeEntity({
-    assetTypeId: "hardcoded-mutual-fund-idr",
-    assetTypeCode: "MUTUAL_FUND",
-    assetTypeName: "Reksa Dana",
-    currency: "IDR",
-    totalCost: 25_000_000,
-    currentValue: 27_500_000,
-    unrealizedGain: 2_500_000,
-    realizedGain: 0,
-  }),
-];
-
 type UseGetPortfolioByAssetTypeReturnType =
   | { data: null; loading: true; error: null }
   | { data: PortfolioByAssetTypeEntity[]; loading: false; error: null }
@@ -76,13 +30,7 @@ async function PortfolioByAssetTypeFetcher([_, clerk]: [string, ReturnType<typeo
 
 export function useGetPortfolioByAssetType(): UseGetPortfolioByAssetTypeReturnType {
   const clerk = useClerk();
-  const swrKey = USE_HARDCODED_ASSET_TYPE_DATA ? null : (["portfolio-by-asset-type", clerk] as [string, typeof clerk]);
-  const { data, isLoading, error } = useSWR(swrKey, PortfolioByAssetTypeFetcher);
-
-  // TODO: Remove when backend deploys currency grouping
-  if (USE_HARDCODED_ASSET_TYPE_DATA) {
-    return { data: HARDCODED_DATA, loading: false, error: null };
-  }
+  const { data, isLoading, error } = useSWR(["portfolio-by-asset-type", clerk], PortfolioByAssetTypeFetcher);
 
   if (isLoading) return { data: null, loading: true, error: null };
 

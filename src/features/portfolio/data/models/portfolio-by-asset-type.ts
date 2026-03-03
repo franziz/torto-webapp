@@ -36,7 +36,7 @@ export class PortfolioByAssetTypeModel implements AbstractModel {
       assetTypeId: doc["asset_type_id"],
       assetTypeCode: doc["asset_type_code"],
       assetTypeName: doc["asset_type_name"],
-      currency: doc["currency"] ?? "USD",
+      currency: doc["currency"],
       totalCost: Number(doc["total_cost"]),
       currentValue: Number(doc["current_value"]),
       unrealizedGain: Number(doc["unrealized_gain"]),
