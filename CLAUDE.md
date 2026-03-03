@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Design Language
+
+See [docs/DESIGN_LANGUAGE.md](docs/DESIGN_LANGUAGE.md) for the full UI/UX design system — color tokens, typography, component usage, layout patterns, and interaction guidelines. **Always consult this file before building or modifying UI.**
+
 ## Commands
 
 ```bash
