@@ -11,7 +11,7 @@ import { CreateAccountModal } from "@/app/(authenticated)/wealth/accounts/_compo
 import { EditAccountModal } from "@/app/(authenticated)/wealth/accounts/_components/edit-account-modal";
 import { DeleteAccountDialog } from "@/app/(authenticated)/wealth/accounts/_components/delete-account-dialog";
 import { AccountEntity } from "@/features/account/domain/entities/account";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export function AccountListImpl() {
   const { accounts, loading, error } = useListAccounts({ page: 1, limit: 50 });
@@ -43,7 +43,19 @@ export function AccountListImpl() {
         bodyClassName=""
       >
         {accounts.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-500">No accounts found.</p>
+          <div className="flex flex-col items-center py-12">
+            <div className="flex size-12 items-center justify-center rounded-full bg-primary-50">
+              <BanknotesIcon className="size-6 text-primary-300" />
+            </div>
+            <h3 className="mt-4 text-base font-semibold text-gray-900">No accounts yet</h3>
+            <p className="mt-1 max-w-sm text-center text-sm text-gray-500">
+              Add your broker accounts (e.g. IBKR, Tiger Brokers), bank accounts (e.g. DBS), or any financial account
+              that holds your assets.
+            </p>
+            <FilledButton type="button" onClick={() => setCreateOpen(true)} className="mt-6 w-auto">
+              Create your first account
+            </FilledButton>
+          </div>
         ) : (
           <Table.Container>
             <Table>

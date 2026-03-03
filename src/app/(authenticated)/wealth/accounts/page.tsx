@@ -4,7 +4,9 @@ import { AccountListImpl } from "@/app/(authenticated)/wealth/accounts/_componen
 export default function AccountsPage() {
   return (
     <div className="space-y-6">
-      <PageHeading>Accounts</PageHeading>
+      <PageHeading subtitle="Manage your broker accounts, bank accounts, and other financial accounts that hold your assets.">
+        Accounts
+      </PageHeading>
       <AccountListImpl />
     </div>
   );
