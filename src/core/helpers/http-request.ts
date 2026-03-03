@@ -29,7 +29,7 @@ export class HttpRequest {
     const mergedConfig = {
       requireAuth: config.requireAuth ?? true,
       requireAccount: config.requireAccount ?? true,
-      contentType: config.contentType,
+      contentType: config.contentType ?? "application/json",
       headers: Object.assign({}, config.headers),
     };
 
@@ -69,11 +69,17 @@ export class HttpRequest {
     });
 
     if (!response.ok) {
-      const data = await response.json();
+      let data: Record<string, any> | null = null;
+      try {
+        data = await response.json();
+      } catch {
+        throw new ServerError(ErrorCodes.UNKNOWN, { code: response.status, message: response.statusText });
+      }
+
       if (!data) throw new ServerError(ErrorCodes.UNKNOWN, { code: response.status });
 
       const ErrorCode = ErrorCodes.find(data.code);
-      if (ErrorCode) throw new ServerError(ErrorCode);
+      if (ErrorCode) throw new ServerError(ErrorCode, { message: data.message });
 
       throw new ServerError(ErrorCodes.UNKNOWN, { code: data.code, message: data.message });
     }
