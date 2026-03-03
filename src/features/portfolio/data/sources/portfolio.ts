@@ -3,6 +3,7 @@ import { PortfolioSummaryModel } from "@/features/portfolio/data/models/portfoli
 import { PortfolioByAccountModel } from "@/features/portfolio/data/models/portfolio-by-account";
 import { PortfolioByAssetTypeModel } from "@/features/portfolio/data/models/portfolio-by-asset-type";
 import { PortfolioByCountryModel } from "@/features/portfolio/data/models/portfolio-by-country";
+import { PortfolioConvertedSummaryModel } from "@/features/portfolio/data/models/portfolio-converted-summary";
 import { SessionEntity } from "@/features/authentication/domain/entities/session";
 import { HttpRequest } from "@/core/helpers/http-request";
 import { ErrorCodes, ServerError } from "@/core/resources/server-error";
@@ -79,6 +80,25 @@ export class PortfolioServiceImpl implements PortfolioService {
         { requireAccount: false },
       );
       return extractArray(result).map((item) => PortfolioByCountryModel.fromJson(item));
+    } catch (err) {
+      if (err instanceof ServerError) throw err;
+      else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });
+    }
+  }
+
+  public async getConvertedSummary(session: SessionEntity, currency: string): Promise<PortfolioConvertedSummaryModel> {
+    try {
+      const result = await this.http.request(
+        {
+          path: "/api/portfolio/summary/converted",
+          method: "GET",
+          searchParams: { currency },
+          session,
+        },
+        { requireAccount: false },
+      );
+      const data = result && typeof result === "object" && result.data ? result.data : result;
+      return PortfolioConvertedSummaryModel.fromJson(data);
     } catch (err) {
       if (err instanceof ServerError) throw err;
       else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });

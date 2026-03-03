@@ -2,20 +2,19 @@
 
 import { useState, useMemo } from "react";
 import { useGetPortfolioSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-summary";
+import { useListCurrencies } from "@/features/currency/presentation/hooks/use-list-currencies";
 import { CurrencyTabs } from "@/core/presentations/components/currency-tabs";
 import { PortfolioSummaryImpl } from "@/app/(authenticated)/home/_components/portfolio-summary-impl";
 import { PortfolioBreakdownImpl } from "@/app/(authenticated)/home/_components/portfolio-breakdown-impl";
-import { getDisplayCurrencyOptions } from "@/core/helpers/exchange-rates";
 
 export function DashboardClient() {
   const { data } = useGetPortfolioSummary();
+  const displayCurrencyOptions = useListCurrencies();
 
   const nativeCurrencies = useMemo(() => {
     if (!data) return [];
     return [...new Set(data.map((s) => s.currency))];
   }, [data]);
-
-  const displayCurrencyOptions = useMemo(() => getDisplayCurrencyOptions(nativeCurrencies), [nativeCurrencies]);
 
   const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
   const [displayCurrency, setDisplayCurrency] = useState<string | null>(null);

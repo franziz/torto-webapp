@@ -67,6 +67,12 @@ export class ErrorCodes {
     message: "Resource expired",
   };
 
+  public static readonly EXCHANGE_RATE_NOT_FOUND: ErrorStructureType = {
+    code: "EXCHANGE_RATE_NOT_FOUND",
+    httpCode: 400,
+    message: "Exchange rate not available",
+  };
+
   public static readonly UNKNOWN: ErrorStructureType = {
     code: "UNKNOWN",
     httpCode: 500,

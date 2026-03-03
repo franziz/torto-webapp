@@ -1,37 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
-import { useGetPortfolioSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-summary";
+import { useGetPortfolioConvertedSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-converted-summary";
 import { SummaryCard } from "@/core/presentations/components/summary-card";
 import { Spinner } from "@/core/presentations/components/spinner";
 import { ErrorDisplay } from "@/core/presentations/components/error-display";
 import { formatCompactCurrency } from "@/core/helpers/format-currency";
-import { convertCurrency } from "@/core/helpers/exchange-rates";
 
 type PortfolioSummaryImplProps = {
   displayCurrency: string | null;
 };
 
 export function PortfolioSummaryImpl({ displayCurrency }: PortfolioSummaryImplProps) {
-  const { data, loading, error } = useGetPortfolioSummary();
-
-  const convertedSummary = useMemo(() => {
-    if (!data || !displayCurrency) return null;
-
-    let totalCost = 0;
-    let currentValue = 0;
-    let unrealizedGain = 0;
-    let realizedGain = 0;
-
-    for (const s of data) {
-      totalCost += convertCurrency(s.totalCost, s.currency, displayCurrency);
-      currentValue += convertCurrency(s.currentValue, s.currency, displayCurrency);
-      unrealizedGain += convertCurrency(s.unrealizedGain, s.currency, displayCurrency);
-      realizedGain += convertCurrency(s.realizedGain, s.currency, displayCurrency);
-    }
-
-    return { totalCost, currentValue, unrealizedGain, realizedGain, currency: displayCurrency };
-  }, [data, displayCurrency]);
+  const { data, loading, error } = useGetPortfolioConvertedSummary(displayCurrency);
 
   if (loading) {
     return (
@@ -45,7 +25,7 @@ export function PortfolioSummaryImpl({ displayCurrency }: PortfolioSummaryImplPr
     return <ErrorDisplay>{error.message}</ErrorDisplay>;
   }
 
-  if (!convertedSummary) {
+  if (!data) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <SummaryCard title="Total Cost" value="-" />
@@ -56,26 +36,33 @@ export function PortfolioSummaryImpl({ displayCurrency }: PortfolioSummaryImplPr
     );
   }
 
-  const { currency } = convertedSummary;
+  const { currency } = data;
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <SummaryCard title="Total Cost" value={formatCompactCurrency(convertedSummary.totalCost, currency)} />
-      <SummaryCard title="Current Value" value={formatCompactCurrency(convertedSummary.currentValue, currency)} />
+      <SummaryCard title="Total Cost" value={formatCompactCurrency(data.totalCost, currency)} />
+      <SummaryCard
+        title="Current Value"
+        value={data.currentValue != null ? formatCompactCurrency(data.currentValue, currency) : "N/A"}
+      />
       <SummaryCard
         title="Unrealized Gain"
-        value={formatCompactCurrency(convertedSummary.unrealizedGain, currency)}
-        trend={{
-          value: formatCompactCurrency(convertedSummary.unrealizedGain, currency),
-          positive: convertedSummary.unrealizedGain >= 0,
-        }}
+        value={data.unrealizedGain != null ? formatCompactCurrency(data.unrealizedGain, currency) : "N/A"}
+        trend={
+          data.unrealizedGain != null
+            ? {
+                value: formatCompactCurrency(data.unrealizedGain, currency),
+                positive: data.unrealizedGain >= 0,
+              }
+            : undefined
+        }
       />
       <SummaryCard
         title="Realized Gain"
-        value={formatCompactCurrency(convertedSummary.realizedGain, currency)}
+        value={formatCompactCurrency(data.realizedGain, currency)}
         trend={{
-          value: formatCompactCurrency(convertedSummary.realizedGain, currency),
-          positive: convertedSummary.realizedGain >= 0,
+          value: formatCompactCurrency(data.realizedGain, currency),
+          positive: data.realizedGain >= 0,
         }}
       />
     </div>
