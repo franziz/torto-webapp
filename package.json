@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack --port 13001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.5",
@@ -21,7 +23,9 @@
     "swr": "^2.3.4"
   },
   "devDependencies": {
+    "@clerk/testing": "^1.14.3",
     "@eslint/eslintrc": "^3.3.1",
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/luxon": "^3.6.2",
     "@types/node": "^24.1.0",

@@ -34,3 +34,8 @@ next-env.d.ts
 
 # clerk
 /.clerk/
+
+# playwright
+playwright/.clerk/
+test-results/
+playwright-report/
