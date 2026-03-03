@@ -6,23 +6,23 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
     /* BASE / BACKGROUND */
-    --color-background: #FAFAFA;
+    --color-background: #F8FAFB;
 
-    /* NEUTRAL */
+    /* NEUTRAL (Slate) */
     --color-neutral-50: #FFFFFF;
-    --color-neutral-100: #F3F4F6;
-    --color-neutral-200: #E5E7EB;
-    --color-neutral-300: #6B7280;
-    --color-neutral-400: #374151;
-    --color-neutral-500: #111827;
+    --color-neutral-100: #F1F5F9;
+    --color-neutral-200: #E2E8F0;
+    --color-neutral-300: #64748B;
+    --color-neutral-400: #334155;
+    --color-neutral-500: #0F172A;
 
-    /* PRIMARY */
-    --color-primary-50: #EFF6FF;
-    --color-primary-100: #BFDBFE;
-    --color-primary-200: #60A5FA;
-    --color-primary-300: #2563EB;
-    --color-primary-400: #1D4ED8;
-    --color-primary-500: #1E3A5F;
+    /* PRIMARY (Deep Teal) */
+    --color-primary-50: #F0FDFA;
+    --color-primary-100: #CCFBF1;
+    --color-primary-200: #2DD4BF;
+    --color-primary-300: #0F766E;
+    --color-primary-400: #115E59;
+    --color-primary-500: #134E4A;
 
     /* WARNING */
     --color-warning-50: #FFFBEB;
@@ -40,13 +40,13 @@
     --color-error-400: #DC2626;
     --color-error-500: #991B1B;
 
-    /* SUCCESS */
-    --color-success-50: #F0FDF4;
-    --color-success-100: #DCFCE7;
-    --color-success-200: #4ADE80;
-    --color-success-300: #22C55E;
-    --color-success-400: #16A34A;
-    --color-success-500: #166534;
+    /* SUCCESS (Emerald) */
+    --color-success-50: #ECFDF5;
+    --color-success-100: #D1FAE5;
+    --color-success-200: #6EE7B7;
+    --color-success-300: #10B981;
+    --color-success-400: #059669;
+    --color-success-500: #064E3B;
 }
 
 @utility scrollbar-hide {
