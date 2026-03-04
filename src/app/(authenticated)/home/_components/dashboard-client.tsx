@@ -9,7 +9,12 @@ import { PortfolioBreakdownImpl } from "@/app/(authenticated)/home/_components/p
 
 export function DashboardClient() {
   const { data } = useGetPortfolioSummary();
-  const displayCurrencyOptions = useListCurrencies();
+  const { currencies } = useListCurrencies();
+
+  const displayCurrencyOptions = useMemo(() => {
+    if (!currencies) return [];
+    return currencies.map((c) => c.code);
+  }, [currencies]);
 
   const nativeCurrencies = useMemo(() => {
     if (!data) return [];
