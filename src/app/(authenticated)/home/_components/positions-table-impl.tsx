@@ -45,7 +45,6 @@ export function PositionsTableImpl() {
               { node: "Avg Cost", hideOnMobile: true },
               { node: "Current Value", hideOnMobile: false },
               { node: "Gain", hideOnMobile: false },
-              { node: "Currency", hideOnMobile: true },
             ]}
           />
           <Table.Body
@@ -70,12 +69,11 @@ export function PositionsTableImpl() {
                 {
                   node: (
                     <span className={pos.unrealizedGain >= 0 ? "text-green-600" : "text-red-600"}>
-                      {formatCurrency(pos.unrealizedGain, pos.currency)}
+                      {formatCurrency(pos.unrealizedGain, pos.currency).replace("-", "\u2011")}
                     </span>
                   ),
                   hideOnMobile: false,
                 },
-                { node: pos.currency, hideOnMobile: true },
               ],
             }))}
           />
