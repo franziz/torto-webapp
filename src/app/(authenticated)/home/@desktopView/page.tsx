@@ -3,7 +3,7 @@ import { DashboardClient } from "@/app/(authenticated)/home/_components/dashboar
 import { PositionsTableImpl } from "@/app/(authenticated)/home/_components/positions-table-impl";
 import { QuickStartGuideImpl } from "@/app/(authenticated)/home/_components/quick-start-guide-impl";
 
-export default function HomePage() {
+export default function DesktopViewPage() {
   return (
     <div className="space-y-6">
       <PageHeading>Dashboard</PageHeading>
