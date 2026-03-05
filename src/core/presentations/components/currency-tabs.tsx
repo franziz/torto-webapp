@@ -1,17 +1,24 @@
 "use client";
 
+const ALL_TAB = "ALL";
+
 type CurrencyTabsProps = {
   currencies: string[];
   selected: string;
   onChange: (currency: string) => void;
+  showAll?: boolean;
 };
 
-export function CurrencyTabs({ currencies, selected, onChange }: CurrencyTabsProps) {
-  if (currencies.length <= 1) return null;
+export { ALL_TAB };
+
+export function CurrencyTabs({ currencies, selected, onChange, showAll }: CurrencyTabsProps) {
+  const tabs = showAll ? [ALL_TAB, ...currencies] : currencies;
+
+  if (tabs.length <= 1) return null;
 
   return (
-    <div className="flex gap-2">
-      {currencies.map((currency) => (
+    <div className="flex flex-wrap gap-2">
+      {tabs.map((currency) => (
         <button
           key={currency}
           onClick={() => onChange(currency)}
@@ -21,7 +28,7 @@ export function CurrencyTabs({ currencies, selected, onChange }: CurrencyTabsPro
               : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
-          {currency}
+          {currency === ALL_TAB ? "All" : currency}
         </button>
       ))}
     </div>

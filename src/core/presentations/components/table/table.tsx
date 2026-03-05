@@ -1,9 +1,10 @@
 import React from "react";
+import clsx from "clsx";
 
 function TableContainer({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className="inline-block min-w-full align-middle">
-      <div className={`overflow-hidden rounded-sm shadow-sm ring-1 ring-black/5 ${className ?? ""}`}>
+    <div className="w-full align-middle">
+      <div className={`overflow-x-auto rounded-sm shadow-sm ring-1 ring-black/5 ${className ?? ""}`}>
         {children}
       </div>
     </div>
@@ -11,7 +12,7 @@ function TableContainer({ children, className }: { children: React.ReactNode; cl
 }
 
 function TableRoot({ children }: { children: React.ReactNode }) {
-  return <table className="min-w-full table-auto divide-y divide-gray-300 md:table-fixed">{children}</table>;
+  return <table className="min-w-full table-auto divide-y divide-gray-300">{children}</table>;
 }
 
 export interface TableHeaderItem {
@@ -34,7 +35,7 @@ function TableHeader({ items }: { items: TableHeaderItem[] }) {
             scope="col"
             className={cls(
               item.hideOnMobile,
-              `px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ${i === 0 ? "pl-4" : ""} ${item.className ?? ""}`,
+              clsx("px-3 py-3.5 text-sm font-semibold text-gray-900", i === 0 && "pl-4", item.className ?? "text-left"),
             )}
           >
             {item.node}
@@ -54,6 +55,38 @@ export interface TableBodyItem {
   }[];
 }
 
+export interface TableFooterCell {
+  node: React.ReactNode;
+  hideOnMobile: boolean;
+  className?: string;
+  colSpan?: number;
+}
+
+function TableFooter({ cells }: { cells: TableFooterCell[] }) {
+  const cls = (hideOnMobile: boolean, base: string) =>
+    hideOnMobile ? `hidden ${base} sm:table-cell` : base;
+
+  if (cells.length === 0) return null;
+  return (
+    <tfoot className="border-t-2 border-gray-300 bg-gray-50">
+      <tr>
+        {cells.map((cell, i) => (
+          <td
+            key={`tf-${i}`}
+            colSpan={cell.colSpan}
+            className={cls(
+              cell.hideOnMobile,
+              clsx("px-3 py-3 text-sm font-semibold text-gray-900", i === 0 && "pl-4", cell.className ?? "text-left"),
+            )}
+          >
+            {cell.node}
+          </td>
+        ))}
+      </tr>
+    </tfoot>
+  );
+}
+
 function TableBody({ items }: { items: TableBodyItem[] }) {
   const cls = (hideOnMobile: boolean, base: string) =>
     hideOnMobile ? `hidden ${base} sm:table-cell` : base;
@@ -68,7 +101,7 @@ function TableBody({ items }: { items: TableBodyItem[] }) {
               key={`cell-${cellIdx}`}
               className={cls(
                 cell.hideOnMobile,
-                `px-3 py-4 text-left text-sm whitespace-nowrap text-gray-500 ${cellIdx === 0 ? "pl-4" : ""} ${cell.className ?? ""}`,
+                clsx("px-3 py-4 text-sm text-gray-500", cellIdx === 0 && "pl-4", cell.className ?? "text-left"),
               )}
             >
               {cell.node}
@@ -84,4 +117,5 @@ export const Table = Object.assign(TableRoot, {
   Container: TableContainer,
   Header: TableHeader,
   Body: TableBody,
+  Footer: TableFooter,
 });

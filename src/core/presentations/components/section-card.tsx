@@ -9,11 +9,11 @@ interface SectionCardProps {
 export function SectionCard(props: SectionCardProps) {
   return (
     <div className={`flex flex-col rounded-lg border border-neutral-200 bg-white ${props.className ?? ""}`}>
-      <div className="flex flex-row items-center gap-x-2 border-b border-b-neutral-100 px-6 py-4">
+      <div className="flex flex-row items-center gap-x-2 border-b border-b-neutral-100 px-4 py-3 sm:px-6 sm:py-4">
         <div className="text-sm leading-6 font-semibold">{props.title}</div>
         {props.headerAction && <div className="ml-auto">{props.headerAction}</div>}
       </div>
-      <div className={props.bodyClassName ?? "p-6"}>{props.children}</div>
+      <div className={props.bodyClassName ?? "p-4 sm:p-6"}>{props.children}</div>
     </div>
   );
 }
