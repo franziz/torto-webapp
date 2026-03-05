@@ -7,17 +7,22 @@ import { Spinner } from "@/core/presentations/components/spinner";
 import { ErrorDisplay } from "@/core/presentations/components/error-display";
 import { Table } from "@/core/presentations/components/table/table";
 import { FilledButton } from "@/core/presentations/components/filled-button";
+import { DataCard, DataCardRow } from "@/core/presentations/components/data-card";
+import { Modal } from "@/core/presentations/components/modal";
 import { CreateAccountModal } from "@/app/(authenticated)/wealth/accounts/_components/create-account-modal";
 import { EditAccountModal } from "@/app/(authenticated)/wealth/accounts/_components/edit-account-modal";
 import { DeleteAccountDialog } from "@/app/(authenticated)/wealth/accounts/_components/delete-account-dialog";
 import { AccountEntity } from "@/features/account/domain/entities/account";
 import { BanknotesIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
 
 export function AccountListImpl() {
+  const isMobile = useIsMobile();
   const { accounts, loading, error } = useListAccounts({ page: 1, limit: 50 });
   const [createOpen, setCreateOpen] = useState(false);
   const [editAccount, setEditAccount] = useState<AccountEntity | null>(null);
   const [deleteAccount, setDeleteAccount] = useState<AccountEntity | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<AccountEntity | null>(null);
 
   if (loading) {
     return (
@@ -55,6 +60,38 @@ export function AccountListImpl() {
             <FilledButton type="button" onClick={() => setCreateOpen(true)} className="mt-6 w-auto">
               Create your first account
             </FilledButton>
+          </div>
+        ) : isMobile ? (
+          <div className="space-y-3 p-4">
+            {accounts.map((account) => (
+              <DataCard key={account.id} onClick={() => setSelectedAccount(account)}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-gray-900">{account.name}</div>
+                    <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-400">
+                      <span>{account.country}</span>
+                      <span>{account.currency}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-x-3">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setEditAccount(account); }}
+                      className="p-1.5 text-gray-400 hover:text-primary-300"
+                    >
+                      <PencilSquareIcon className="size-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setDeleteAccount(account); }}
+                      className="p-1.5 text-gray-400 hover:text-red-500"
+                    >
+                      <TrashIcon className="size-5" />
+                    </button>
+                  </div>
+                </div>
+              </DataCard>
+            ))}
           </div>
         ) : (
           <Table.Container>
@@ -106,6 +143,16 @@ export function AccountListImpl() {
           </Table.Container>
         )}
       </SectionCard>
+
+      {selectedAccount && (
+        <Modal open={!!selectedAccount} onClose={() => setSelectedAccount(null)} title={selectedAccount.name}>
+          <div className="space-y-3">
+            <DataCardRow label="Country" value={selectedAccount.country} />
+            <DataCardRow label="Currency" value={selectedAccount.currency} />
+            <DataCardRow label="Description" value={selectedAccount.description ?? "\u2014"} />
+          </div>
+        </Modal>
+      )}
 
       <CreateAccountModal open={createOpen} onClose={() => setCreateOpen(false)} />
       {editAccount && (

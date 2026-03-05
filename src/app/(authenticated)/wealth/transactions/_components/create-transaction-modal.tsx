@@ -28,7 +28,7 @@ export function CreateTransactionModal(props: CreateTransactionModalProps) {
   const [units, setUnits] = useState("");
   const [pricePerUnit, setPricePerUnit] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
-  const [fee, setFee] = useState("0");
+
   const [currency, setCurrency] = useState("");
   const [transactionDate, setTransactionDate] = useState(DateTime.now().toISODate() ?? "");
   const [notes, setNotes] = useState("");
@@ -55,7 +55,7 @@ export function CreateTransactionModal(props: CreateTransactionModalProps) {
         units: parseFloat(units),
         pricePerUnit: parseFloat(pricePerUnit),
         totalAmount: parseFloat(totalAmount),
-        fee: parseFloat(fee) || 0,
+
         currency,
         transactionDate,
         notes: notes || undefined,
@@ -66,7 +66,7 @@ export function CreateTransactionModal(props: CreateTransactionModalProps) {
     setUnits("");
     setPricePerUnit("");
     setTotalAmount("");
-    setFee("0");
+
     setCurrency("");
     setTransactionDate(DateTime.now().toISODate() ?? "");
     setNotes("");
@@ -98,7 +98,7 @@ export function CreateTransactionModal(props: CreateTransactionModalProps) {
           required
           placeholder="Select type"
         />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextInput label="Units" type="number" value={units} onChange={setUnits} required placeholder="0" />
           <TextInput
             label="Price per Unit"
@@ -109,11 +109,8 @@ export function CreateTransactionModal(props: CreateTransactionModalProps) {
             placeholder="0.00"
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <TextInput label="Total Amount" type="number" value={totalAmount} onChange={setTotalAmount} required />
-          <TextInput label="Fee" type="number" value={fee} onChange={setFee} placeholder="0.00" />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
+        <TextInput label="Total Amount" type="number" value={totalAmount} onChange={setTotalAmount} required />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextInput label="Currency" value={currency} onChange={setCurrency} required placeholder="SGD" />
           <DateInput label="Date" value={transactionDate} onChange={setTransactionDate} required />
         </div>

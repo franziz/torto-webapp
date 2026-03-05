@@ -121,6 +121,7 @@ Chart palette: `#3b82f6`, `#f59e0b`, `#10b981`, `#ef4444`, `#8b5cf6`, `#ec4899`
 
 ### Page Structure
 
+**Desktop (md+):**
 ```
 ┌──────────────────────────────────────────────────┐
 │ Root (h-screen, flex, overflow-hidden)            │
@@ -137,18 +138,21 @@ Chart palette: `#3b82f6`, `#f59e0b`, `#10b981`, `#ef4444`, `#8b5cf6`, `#ec4899`
 └──────────────────────────────────────────────────┘
 ```
 
+**Mobile (<md):** Sidebar hidden. Content uses full width with `pb-20 md:pb-8` for bottom tab bar clearance. `BottomTabBar` is fixed at bottom with same nav items as sidebar.
+
 ### Spacing Values
 
 | Context | Classes |
 |---|---|
 | Content area padding | `p-8` |
 | Sidebar padding | `p-6` |
-| Card body padding | `p-6` (default) |
-| Card header padding | `px-6 py-4` |
+| Card body padding | `p-4 sm:p-6` (default) |
+| Card header padding | `px-4 py-3 sm:px-6 sm:py-4` |
 | Form field spacing | `space-y-4` (tight) or `space-y-6` (relaxed) |
 | Grid gap | `gap-4` (cards) or `gap-6` (sections) |
 | Section vertical gap | `space-y-6` or `space-y-8` |
-| Button internal padding | `px-3 py-2` |
+| Button internal padding | `px-3 py-2.5 sm:py-2` (default), `px-2.5 py-1.5` (sm) — via `BUTTON_SIZE_CLASSES` |
+| Input internal padding | `py-2.5 sm:py-2` (default), `py-1.5` (sm) — via `INPUT_SIZE_CLASSES` |
 | Page heading bottom | `mb-8` |
 | Header bar padding | `px-6 py-3` |
 
@@ -182,6 +186,7 @@ All shared components live in `src/core/presentations/components/`. Import via `
 | Prop | Values | Default |
 |---|---|---|
 | `color` | `"primary"` / `"secondary"` / `"danger"` | `"primary"` |
+| `size` | `"default"` / `"sm"` (`ComponentSize`) | `"default"` |
 | `loading` | boolean | `false` |
 | `disabled` | boolean | `false` |
 | `type` | `"button"` / `"submit"` / `"reset"` | `"submit"` |
@@ -191,7 +196,11 @@ Color map:
 - **secondary**: `bg-gray-200 hover:bg-gray-300 text-gray-900`
 - **danger**: `bg-red-500 hover:bg-red-600 text-white`
 
-Base classes: `inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs`
+Size classes (from `BUTTON_SIZE_CLASSES` in `form-field.tsx`):
+- **default**: `px-3 py-2.5 text-sm font-semibold sm:py-2`
+- **sm**: `px-2.5 py-1.5 text-xs font-semibold`
+
+Base classes: `inline-flex w-full justify-center rounded-md shadow-xs`
 
 **OutlinedButton** — Secondary actions, cancel buttons. Full-width by default.
 
@@ -207,17 +216,22 @@ Style: `bg-white ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-gray-900`
 
 ### Form Inputs
 
-All form inputs share a consistent style:
-- Label: `block text-sm font-medium text-gray-700`
-- Input: `block w-full rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-300`
+All form inputs extend `BaseInputProps` (from `form-field.tsx`): `label?`, `error?`, `className?`, `size?: ComponentSize`, `required?`. Each input wraps its element in `<FormField>` which handles label, error, and layout.
+
+Shared input styling:
+- Input: `block w-full rounded-md bg-white px-3 ${INPUT_SIZE_CLASSES[size]} text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-300`
 - Error: `mt-1 text-sm text-red-600`
 - Label-to-input gap: `mt-1`
 
+Size classes (from `INPUT_SIZE_CLASSES` in `form-field.tsx`):
+- **default**: `py-2.5 text-sm sm:py-2` (mobile-first: larger touch target, compact on desktop)
+- **sm**: `py-1.5 text-xs` (compact inline use, always small)
+
 | Component | Extra Props |
 |---|---|
-| `TextInput` | `type`, `placeholder`, `value`, `onChange`, `error` |
-| `SelectInput` | `options: {label, value}[]`, `placeholder` |
-| `TextareaInput` | `rows` (default 3) |
+| `TextInput` | `type`, `placeholder`, `value`, `onChange` |
+| `SelectInput` | `options: {label, value}[]`, `placeholder`, `value`, `onChange` |
+| `TextareaInput` | `placeholder`, `value`, `onChange`, `rows` (default 3) |
 | `DateInput` | `value` (string), `onChange` |
 
 ### Cards
@@ -235,8 +249,8 @@ All form inputs share a consistent style:
 ```
 
 Style: `rounded-lg border border-neutral-200 bg-white`
-- Header: `border-b border-b-neutral-100 px-6 py-4`
-- Body: `p-6` (default)
+- Header: `border-b border-b-neutral-100 px-4 py-3 sm:px-6 sm:py-4`
+- Body: `p-4 sm:p-6` (default)
 
 **SummaryCard** — KPI display.
 
@@ -326,11 +340,51 @@ Uses SVG with the chart color palette. Legend rendered below.
 - Active: `bg-gray-900 text-white rounded-full`
 - Inactive: `bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-full`
 
+### SegmentedToggle
+
+Binary or multi-option toggle for switching between modes (e.g. "Select Existing" / "Create New").
+
+```tsx
+<SegmentedToggle
+  options={[
+    { label: "Select Existing", value: "select" },
+    { label: "Create New", value: "create" },
+  ]}
+  value={mode}
+  onChange={setMode}
+/>
+```
+
+Style: Container `rounded-lg border border-gray-200 p-0.5`, active pill `bg-primary-300 text-white rounded-md`, inactive `text-gray-600 hover:text-gray-900 rounded-md`.
+
+### DataCard / DataCardRow
+
+Mobile-friendly card for displaying key-value data (used in list views on small screens).
+
+```tsx
+<DataCard onClick={handleClick}>
+  <DataCardRow label="Name" value="My Account" />
+  <DataCardRow label="Currency" value="SGD" />
+</DataCard>
+```
+
+Style: `rounded-lg border border-neutral-200 bg-white p-4`, optional `onClick` adds `cursor-pointer active:bg-gray-50`.
+
+### StepIndicator
+
+Multi-step progress indicator for wizards.
+
+```tsx
+<StepIndicator steps={["Account", "Asset", "Transaction"]} currentIndex={1} />
+```
+
+Uses numbered circles with `primary-300` for completed/current steps, `gray-300` for future. Connecting lines between steps.
+
 ### Feedback
 
 | Component | Usage |
 |---|---|
-| `Spinner` | Centered loading. Wrap in `<div className="flex justify-center py-12">` |
+| `Spinner` | Centered loading. Wrap in `<div className="flex justify-center py-12">`. Accepts `className` to override color (default `text-primary-300`). Buttons pass `className="text-white"` or `className="text-gray-900"`. |
 | `ErrorDisplay` | Error alert. Red bg with `XCircleIcon`. Children = error message text. |
 | `PageHeading` | Top of every page. `children` = title, `subtitle` = optional description. |
 | `TortoLogo` | Brand logo. `variant="dark"` (default) or `"light"`. Size via `className="w-28"`. |

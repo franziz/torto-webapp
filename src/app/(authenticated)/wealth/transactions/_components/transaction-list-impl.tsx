@@ -11,14 +11,20 @@ import { Table } from "@/core/presentations/components/table/table";
 import { FilledButton } from "@/core/presentations/components/filled-button";
 import { SelectInput } from "@/core/presentations/components/select-input";
 import { Badge } from "@/core/presentations/components/badge";
-import { CreateTransactionModal } from "@/app/(authenticated)/wealth/transactions/_components/create-transaction-modal";
+import { DataCard, DataCardRow } from "@/core/presentations/components/data-card";
+import { Modal } from "@/core/presentations/components/modal";
+import { AddTransactionWizard } from "@/core/presentations/components/add-transaction-wizard/add-transaction-wizard";
 import { formatCurrency } from "@/core/helpers/format-currency";
+import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
+import { TransactionEntity } from "@/features/transaction/domain/entities/transaction";
 import { DateTime } from "luxon";
 
 export function TransactionListImpl() {
+  const isMobile = useIsMobile();
   const [assetFilter, setAssetFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
+  const [selectedTx, setSelectedTx] = useState<TransactionEntity | null>(null);
 
   const { transactions, loading, error } = useListTransactions({
     page: 1,
@@ -52,14 +58,14 @@ export function TransactionListImpl() {
           options={[{ label: "All Assets", value: "" }, ...assetOptions]}
           value={assetFilter}
           onChange={setAssetFilter}
-          className="w-48"
+          className="w-full sm:w-48"
         />
         <SelectInput
           label="Type"
           options={[{ label: "All Types", value: "" }, ...typeOptions]}
           value={typeFilter}
           onChange={setTypeFilter}
-          className="w-48"
+          className="w-full sm:w-48"
         />
       </div>
 
@@ -74,6 +80,23 @@ export function TransactionListImpl() {
       >
         {transactions.length === 0 ? (
           <p className="py-8 text-center text-sm text-gray-500">No transactions found.</p>
+        ) : isMobile ? (
+          <div className="space-y-3 p-4">
+            {transactions.map((tx) => (
+              <DataCard key={tx.id} onClick={() => setSelectedTx(tx)}>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="font-medium text-gray-900">{tx.assetName ?? "\u2014"}</div>
+                    <div className="mt-0.5 flex items-center gap-1.5">
+                      <span className="text-xs text-gray-400">{tx.transactionDate.toLocaleString(DateTime.DATE_MED)}</span>
+                      {tx.transactionTypeName && <Badge>{tx.transactionTypeName}</Badge>}
+                    </div>
+                  </div>
+                  <div className="text-sm font-medium">{formatCurrency(tx.totalAmount, tx.currency)}</div>
+                </div>
+              </DataCard>
+            ))}
+          </div>
         ) : (
           <Table.Container>
             <Table>
@@ -86,7 +109,6 @@ export function TransactionListImpl() {
                   { node: "Units", hideOnMobile: true },
                   { node: "Price/Unit", hideOnMobile: true },
                   { node: "Total", hideOnMobile: false },
-                  { node: "Fee", hideOnMobile: true },
                   { node: "Currency", hideOnMobile: true },
                 ]}
               />
@@ -112,7 +134,6 @@ export function TransactionListImpl() {
                       node: <span className="font-medium">{formatCurrency(tx.totalAmount, tx.currency)}</span>,
                       hideOnMobile: false,
                     },
-                    { node: formatCurrency(tx.fee, tx.currency), hideOnMobile: true },
                     { node: tx.currency, hideOnMobile: true },
                   ],
                 }))}
@@ -122,12 +143,21 @@ export function TransactionListImpl() {
         )}
       </SectionCard>
 
-      <CreateTransactionModal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        assets={assets ?? []}
-        transactionTypes={transactionTypes ?? []}
-      />
+      {selectedTx && (
+        <Modal open={!!selectedTx} onClose={() => setSelectedTx(null)} title={selectedTx.assetName ?? "Transaction Details"}>
+          <div className="space-y-3">
+            <DataCardRow label="Date" value={selectedTx.transactionDate.toLocaleString(DateTime.DATE_MED)} />
+            <DataCardRow label="Type" value={selectedTx.transactionTypeName ?? "\u2014"} />
+            <DataCardRow label="Units" value={selectedTx.units.toLocaleString()} />
+            <DataCardRow label="Price/Unit" value={formatCurrency(selectedTx.pricePerUnit, selectedTx.currency)} />
+            <DataCardRow label="Total" value={formatCurrency(selectedTx.totalAmount, selectedTx.currency)} />
+            <DataCardRow label="Currency" value={selectedTx.currency} />
+            {selectedTx.notes && <DataCardRow label="Notes" value={selectedTx.notes} />}
+          </div>
+        </Modal>
+      )}
+
+      <AddTransactionWizard open={createOpen} onClose={() => setCreateOpen(false)} />
     </>
   );
 }
