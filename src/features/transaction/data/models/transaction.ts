@@ -9,7 +9,6 @@ interface TransactionModelConstructor {
   units: number;
   pricePerUnit: number;
   totalAmount: number;
-  fee: number;
   currency: string;
   transactionDate: string;
   notes?: string;
@@ -28,7 +27,6 @@ export class TransactionModel implements AbstractModel {
   public units: number;
   public pricePerUnit: number;
   public totalAmount: number;
-  public fee: number;
   public currency: string;
   public transactionDate: string;
   public notes?: string;
@@ -46,7 +44,6 @@ export class TransactionModel implements AbstractModel {
     this.units = args.units;
     this.pricePerUnit = args.pricePerUnit;
     this.totalAmount = args.totalAmount;
-    this.fee = args.fee;
     this.currency = args.currency;
     this.transactionDate = args.transactionDate;
     this.notes = args.notes;
@@ -66,7 +63,6 @@ export class TransactionModel implements AbstractModel {
       units: Number(doc["units"]),
       pricePerUnit: Number(doc["price_per_unit"]),
       totalAmount: Number(doc["total_amount"]),
-      fee: Number(doc["fee"]),
       currency: doc["currency"],
       transactionDate: doc["transaction_date"],
       notes: doc["notes"],
@@ -87,7 +83,6 @@ export class TransactionModel implements AbstractModel {
       units: this.units,
       pricePerUnit: this.pricePerUnit,
       totalAmount: this.totalAmount,
-      fee: this.fee,
       currency: this.currency,
       transactionDate: DateTime.fromISO(this.transactionDate),
       notes: this.notes,

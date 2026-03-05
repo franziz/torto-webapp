@@ -27,7 +27,7 @@ export class TransactionTypeServiceImpl implements TransactionTypeService {
           searchParams,
           session,
         },
-        { requireAccount: false },
+
       );
 
       return {

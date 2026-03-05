@@ -24,7 +24,7 @@ export class AssetTypeServiceImpl implements AssetTypeService {
           searchParams,
           session,
         },
-        { requireAccount: false },
+
       );
 
       return {

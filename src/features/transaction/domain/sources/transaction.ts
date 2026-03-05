@@ -18,7 +18,6 @@ export interface CreateTransactionServiceParams {
   units: number;
   pricePerUnit: number;
   totalAmount: number;
-  fee: number;
   currency: string;
   transactionDate: string;
   notes?: string;

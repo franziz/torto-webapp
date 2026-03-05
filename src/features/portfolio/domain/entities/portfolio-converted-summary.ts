@@ -8,7 +8,7 @@ interface PortfolioConvertedSummaryEntityConstructor {
   realizedGain: number;
   totalDividends: number;
   totalInterest: number;
-  totalFees: number;
+
   positionCount: number;
   exchangeRatesUsed: Record<string, number>;
 }
@@ -21,7 +21,7 @@ export class PortfolioConvertedSummaryEntity implements AbstractEntity {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public positionCount: number;
   public exchangeRatesUsed: Record<string, number>;
 
@@ -33,7 +33,7 @@ export class PortfolioConvertedSummaryEntity implements AbstractEntity {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.positionCount = args.positionCount;
     this.exchangeRatesUsed = args.exchangeRatesUsed;
   }

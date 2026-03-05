@@ -9,10 +9,14 @@ interface PositionEntityConstructor {
   realizedGain: number;
   totalDividends: number;
   totalInterest: number;
-  totalFees: number;
+
   manualCurrentPrice?: number;
+  isMarketPriced?: boolean;
+  marketPrice?: number;
+  effectivePrice?: number;
   currentValue: number;
   unrealizedGain: number;
+  totalReturn: number;
   currency: string;
   assetName?: string;
   assetTicker?: string;
@@ -31,10 +35,14 @@ export class PositionEntity implements AbstractEntity {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public manualCurrentPrice?: number;
+  public isMarketPriced?: boolean;
+  public marketPrice?: number;
+  public effectivePrice?: number;
   public currentValue: number;
   public unrealizedGain: number;
+  public totalReturn: number;
   public currency: string;
   public assetName?: string;
   public assetTicker?: string;
@@ -52,10 +60,14 @@ export class PositionEntity implements AbstractEntity {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.manualCurrentPrice = args.manualCurrentPrice;
+    this.isMarketPriced = args.isMarketPriced;
+    this.marketPrice = args.marketPrice;
+    this.effectivePrice = args.effectivePrice;
     this.currentValue = args.currentValue;
     this.unrealizedGain = args.unrealizedGain;
+    this.totalReturn = args.totalReturn;
     this.currency = args.currency;
     this.assetName = args.assetName;
     this.assetTicker = args.assetTicker;

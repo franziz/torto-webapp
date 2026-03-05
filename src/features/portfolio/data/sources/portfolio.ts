@@ -26,7 +26,7 @@ export class PortfolioServiceImpl implements PortfolioService {
           method: "GET",
           session,
         },
-        { requireAccount: false },
+
       );
       return extractArray(result).map((item) => PortfolioSummaryModel.fromJson(item));
     } catch (err) {
@@ -43,7 +43,7 @@ export class PortfolioServiceImpl implements PortfolioService {
           method: "GET",
           session,
         },
-        { requireAccount: false },
+
       );
       return extractArray(result).map((item) => PortfolioByAccountModel.fromJson(item));
     } catch (err) {
@@ -60,7 +60,7 @@ export class PortfolioServiceImpl implements PortfolioService {
           method: "GET",
           session,
         },
-        { requireAccount: false },
+
       );
       return extractArray(result).map((item) => PortfolioByAssetTypeModel.fromJson(item));
     } catch (err) {
@@ -77,7 +77,7 @@ export class PortfolioServiceImpl implements PortfolioService {
           method: "GET",
           session,
         },
-        { requireAccount: false },
+
       );
       return extractArray(result).map((item) => PortfolioByCountryModel.fromJson(item));
     } catch (err) {
@@ -95,7 +95,7 @@ export class PortfolioServiceImpl implements PortfolioService {
           searchParams: { currency },
           session,
         },
-        { requireAccount: false },
+
       );
       const data = result && typeof result === "object" && result.data ? result.data : result;
       return PortfolioConvertedSummaryModel.fromJson(data);

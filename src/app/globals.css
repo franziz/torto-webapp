@@ -49,6 +49,10 @@
     --color-success-500: #064E3B;
 }
 
+@utility pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @utility scrollbar-hide {
     &::-webkit-scrollbar {
         display: none;

@@ -9,6 +9,20 @@ import { ErrorCodes, ServerError } from "@/core/resources/server-error";
 export class PositionRepositoryImpl implements PositionRepository {
   constructor(private readonly positionService: PositionService) {}
 
+  public async updateCurrentPrice(
+    assetId: string,
+    price: number,
+    session: SessionEntity,
+  ): Promise<DataState<PositionEntity>> {
+    try {
+      const result = await this.positionService.updateCurrentPrice(assetId, price, session);
+      return new DataSuccess(result.toEntity());
+    } catch (err) {
+      if (err instanceof ServerError) return new DataFailed(err);
+      else return new DataFailed(new ServerError(ErrorCodes.UNKNOWN, { error: err }));
+    }
+  }
+
   public async list(
     filter: ListPositionsFilter,
     session: SessionEntity,

@@ -8,7 +8,7 @@ export class PortfolioSummaryModel implements AbstractModel {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public currency: string;
 
   constructor(args: {
@@ -18,7 +18,7 @@ export class PortfolioSummaryModel implements AbstractModel {
     realizedGain: number;
     totalDividends: number;
     totalInterest: number;
-    totalFees: number;
+
     currency: string;
   }) {
     this.totalCost = args.totalCost;
@@ -27,7 +27,7 @@ export class PortfolioSummaryModel implements AbstractModel {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.currency = args.currency;
   }
 
@@ -39,7 +39,7 @@ export class PortfolioSummaryModel implements AbstractModel {
       realizedGain: Number(doc["realized_gain"]),
       totalDividends: Number(doc["total_dividends"]),
       totalInterest: Number(doc["total_interest"]),
-      totalFees: Number(doc["total_fees"]),
+
       currency: doc["currency"],
     });
   }
@@ -52,7 +52,7 @@ export class PortfolioSummaryModel implements AbstractModel {
       realizedGain: this.realizedGain,
       totalDividends: this.totalDividends,
       totalInterest: this.totalInterest,
-      totalFees: this.totalFees,
+
       currency: this.currency,
     });
   }

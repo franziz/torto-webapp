@@ -9,7 +9,7 @@ export class PortfolioConvertedSummaryModel implements AbstractModel {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public positionCount: number;
   public exchangeRatesUsed: Record<string, number>;
 
@@ -21,7 +21,7 @@ export class PortfolioConvertedSummaryModel implements AbstractModel {
     realizedGain: number;
     totalDividends: number;
     totalInterest: number;
-    totalFees: number;
+
     positionCount: number;
     exchangeRatesUsed: Record<string, number>;
   }) {
@@ -32,7 +32,7 @@ export class PortfolioConvertedSummaryModel implements AbstractModel {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.positionCount = args.positionCount;
     this.exchangeRatesUsed = args.exchangeRatesUsed;
   }
@@ -46,7 +46,7 @@ export class PortfolioConvertedSummaryModel implements AbstractModel {
       realizedGain: Number(doc["realized_gain"]),
       totalDividends: Number(doc["total_dividends"]),
       totalInterest: Number(doc["total_interest"]),
-      totalFees: Number(doc["total_fees"]),
+
       positionCount: Number(doc["position_count"]),
       exchangeRatesUsed: doc["exchange_rates_used"] ?? {},
     });
@@ -61,7 +61,7 @@ export class PortfolioConvertedSummaryModel implements AbstractModel {
       realizedGain: this.realizedGain,
       totalDividends: this.totalDividends,
       totalInterest: this.totalInterest,
-      totalFees: this.totalFees,
+
       positionCount: this.positionCount,
       exchangeRatesUsed: this.exchangeRatesUsed,
     });

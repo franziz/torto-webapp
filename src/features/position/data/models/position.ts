@@ -10,10 +10,14 @@ interface PositionModelConstructor {
   realizedGain: number;
   totalDividends: number;
   totalInterest: number;
-  totalFees: number;
+
   manualCurrentPrice?: number;
+  isMarketPriced?: boolean;
+  marketPrice?: number;
+  effectivePrice?: number;
   currentValue: number;
   unrealizedGain: number;
+  totalReturn: number;
   currency: string;
   assetName?: string;
   assetTicker?: string;
@@ -32,10 +36,14 @@ export class PositionModel implements AbstractModel {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public manualCurrentPrice?: number;
+  public isMarketPriced?: boolean;
+  public marketPrice?: number;
+  public effectivePrice?: number;
   public currentValue: number;
   public unrealizedGain: number;
+  public totalReturn: number;
   public currency: string;
   public assetName?: string;
   public assetTicker?: string;
@@ -53,10 +61,14 @@ export class PositionModel implements AbstractModel {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.manualCurrentPrice = args.manualCurrentPrice;
+    this.isMarketPriced = args.isMarketPriced;
+    this.marketPrice = args.marketPrice;
+    this.effectivePrice = args.effectivePrice;
     this.currentValue = args.currentValue;
     this.unrealizedGain = args.unrealizedGain;
+    this.totalReturn = args.totalReturn;
     this.currency = args.currency;
     this.assetName = args.assetName;
     this.assetTicker = args.assetTicker;
@@ -76,10 +88,14 @@ export class PositionModel implements AbstractModel {
       realizedGain: Number(doc["realized_gain"]),
       totalDividends: Number(doc["total_dividends"]),
       totalInterest: Number(doc["total_interest"]),
-      totalFees: Number(doc["total_fees"]),
+
       manualCurrentPrice: doc["manual_current_price"] != null ? Number(doc["manual_current_price"]) : undefined,
+      isMarketPriced: doc["is_market_priced"] ?? undefined,
+      marketPrice: doc["market_price"] != null ? Number(doc["market_price"]) : undefined,
+      effectivePrice: doc["effective_price"] != null ? Number(doc["effective_price"]) : undefined,
       currentValue: Number(doc["current_value"]),
       unrealizedGain: Number(doc["unrealized_gain"]),
+      totalReturn: Number(doc["total_return"]),
       currency: doc["currency"],
       assetName: doc["asset_name"],
       assetTicker: doc["asset_ticker"],
@@ -100,10 +116,14 @@ export class PositionModel implements AbstractModel {
       realizedGain: this.realizedGain,
       totalDividends: this.totalDividends,
       totalInterest: this.totalInterest,
-      totalFees: this.totalFees,
+
       manualCurrentPrice: this.manualCurrentPrice,
+      isMarketPriced: this.isMarketPriced,
+      marketPrice: this.marketPrice,
+      effectivePrice: this.effectivePrice,
       currentValue: this.currentValue,
       unrealizedGain: this.unrealizedGain,
+      totalReturn: this.totalReturn,
       currency: this.currency,
       assetName: this.assetName,
       assetTicker: this.assetTicker,

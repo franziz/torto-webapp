@@ -33,7 +33,7 @@ export class TransactionServiceImpl implements TransactionService {
           searchParams,
           session,
         },
-        { requireAccount: false },
+
       );
 
       return {
@@ -58,17 +58,16 @@ export class TransactionServiceImpl implements TransactionService {
             units: params.units,
             price_per_unit: params.pricePerUnit,
             total_amount: params.totalAmount,
-            fee: params.fee,
             currency: params.currency,
             transaction_date: params.transactionDate,
             notes: params.notes,
           },
           session,
         },
-        { requireAccount: false },
+
       );
 
-      return TransactionModel.fromJson(result);
+      return TransactionModel.fromJson(result.data);
     } catch (err) {
       if (err instanceof ServerError) throw err;
       else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });

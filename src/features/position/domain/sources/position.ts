@@ -12,4 +12,5 @@ export interface PositionService {
     filter: ListPositionsServiceFilter,
     session: SessionEntity,
   ): Promise<{ data: PositionModel[]; meta: PaginationMetaModel }>;
+  updateCurrentPrice(assetId: string, price: number, session: SessionEntity): Promise<PositionModel>;
 }

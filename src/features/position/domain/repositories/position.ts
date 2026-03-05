@@ -10,4 +10,5 @@ export interface ListPositionsFilter {
 
 export interface PositionRepository {
   list(filter: ListPositionsFilter, session: SessionEntity): Promise<DataState<PaginatedData<PositionEntity>>>;
+  updateCurrentPrice(assetId: string, price: number, session: SessionEntity): Promise<DataState<PositionEntity>>;
 }

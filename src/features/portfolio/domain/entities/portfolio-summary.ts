@@ -7,7 +7,7 @@ interface PortfolioSummaryEntityConstructor {
   realizedGain: number;
   totalDividends: number;
   totalInterest: number;
-  totalFees: number;
+
   currency: string;
 }
 
@@ -18,7 +18,7 @@ export class PortfolioSummaryEntity implements AbstractEntity {
   public realizedGain: number;
   public totalDividends: number;
   public totalInterest: number;
-  public totalFees: number;
+
   public currency: string;
 
   constructor(args: PortfolioSummaryEntityConstructor) {
@@ -28,7 +28,7 @@ export class PortfolioSummaryEntity implements AbstractEntity {
     this.realizedGain = args.realizedGain;
     this.totalDividends = args.totalDividends;
     this.totalInterest = args.totalInterest;
-    this.totalFees = args.totalFees;
+
     this.currency = args.currency;
   }
 }

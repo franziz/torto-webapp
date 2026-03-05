@@ -15,7 +15,7 @@ export class CurrencyServiceImpl implements CurrencyService {
           method: "GET",
           session,
         },
-        { requireAccount: false },
+
       );
       const data = result && Array.isArray(result.data) ? result.data : [];
       return data.map((item: Record<string, any>) => CurrencyModel.fromJson(item));

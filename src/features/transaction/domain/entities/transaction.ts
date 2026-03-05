@@ -8,7 +8,6 @@ interface TransactionEntityConstructor {
   units: number;
   pricePerUnit: number;
   totalAmount: number;
-  fee: number;
   currency: string;
   transactionDate: DateTime;
   notes?: string;
@@ -27,7 +26,6 @@ export class TransactionEntity implements AbstractEntity {
   public units: number;
   public pricePerUnit: number;
   public totalAmount: number;
-  public fee: number;
   public currency: string;
   public transactionDate: DateTime;
   public notes?: string;
@@ -45,7 +43,6 @@ export class TransactionEntity implements AbstractEntity {
     this.units = args.units;
     this.pricePerUnit = args.pricePerUnit;
     this.totalAmount = args.totalAmount;
-    this.fee = args.fee;
     this.currency = args.currency;
     this.transactionDate = args.transactionDate;
     this.notes = args.notes;

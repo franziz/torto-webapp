@@ -30,7 +30,7 @@ export class AssetServiceImpl implements AssetService {
           searchParams,
           session,
         },
-        { requireAccount: false },
+
       );
 
       return {
@@ -58,10 +58,10 @@ export class AssetServiceImpl implements AssetService {
           },
           session,
         },
-        { requireAccount: false },
+
       );
 
-      return AssetModel.fromJson(result);
+      return AssetModel.fromJson(result.data);
     } catch (err) {
       if (err instanceof ServerError) throw err;
       else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });
@@ -76,7 +76,7 @@ export class AssetServiceImpl implements AssetService {
           method: "DELETE",
           session,
         },
-        { requireAccount: false },
+
       );
     } catch (err) {
       if (err instanceof ServerError) throw err;

@@ -14,7 +14,6 @@ export class CreateTransactionUseCaseParams {
   public units: number;
   public pricePerUnit: number;
   public totalAmount: number;
-  public fee: number;
   public currency: string;
   public transactionDate: string;
   public notes?: string;
@@ -25,7 +24,6 @@ export class CreateTransactionUseCaseParams {
     units: number;
     pricePerUnit: number;
     totalAmount: number;
-    fee: number;
     currency: string;
     transactionDate: string;
     notes?: string;
@@ -35,7 +33,6 @@ export class CreateTransactionUseCaseParams {
     this.units = args.units;
     this.pricePerUnit = args.pricePerUnit;
     this.totalAmount = args.totalAmount;
-    this.fee = args.fee;
     this.currency = args.currency;
     this.transactionDate = args.transactionDate;
     this.notes = args.notes;
@@ -59,7 +56,6 @@ export class CreateTransactionUseCase
         units: params.units,
         pricePerUnit: params.pricePerUnit,
         totalAmount: params.totalAmount,
-        fee: params.fee,
         currency: params.currency,
         transactionDate: params.transactionDate,
         notes: params.notes,

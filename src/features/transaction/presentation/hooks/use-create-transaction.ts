@@ -30,7 +30,11 @@ export function useCreateTransaction() {
 
   const { trigger, isMutating, error } = useSWRMutation("create-transaction", fetcher, {
     onSuccess: () => {
-      mutate((key: any) => Array.isArray(key) && key[0] === "list-transactions");
+      mutate(
+        (key: any) =>
+          Array.isArray(key) &&
+          ["list-transactions", "list-positions", "portfolio-summary", "portfolio-by-asset-type", "portfolio-by-account", "portfolio-converted-summary"].includes(key[0]),
+      );
     },
   });
 

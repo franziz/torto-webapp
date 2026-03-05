@@ -29,7 +29,7 @@ export class AccountServiceImpl implements AccountService {
           searchParams,
           session,
         },
-        { requireAccount: false },
+
       );
 
       return {
@@ -56,10 +56,10 @@ export class AccountServiceImpl implements AccountService {
           },
           session,
         },
-        { requireAccount: false },
+
       );
 
-      return AccountModel.fromJson(result);
+      return AccountModel.fromJson(result.data);
     } catch (err) {
       if (err instanceof ServerError) throw err;
       else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });
@@ -80,10 +80,10 @@ export class AccountServiceImpl implements AccountService {
           },
           session,
         },
-        { requireAccount: false },
+
       );
 
-      return AccountModel.fromJson(result);
+      return AccountModel.fromJson(result.data);
     } catch (err) {
       if (err instanceof ServerError) throw err;
       else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });
@@ -98,7 +98,7 @@ export class AccountServiceImpl implements AccountService {
           method: "DELETE",
           session,
         },
-        { requireAccount: false },
+
       );
     } catch (err) {
       if (err instanceof ServerError) throw err;
