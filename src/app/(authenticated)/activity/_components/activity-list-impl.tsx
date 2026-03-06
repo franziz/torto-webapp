@@ -13,17 +13,17 @@ import { SelectInput } from "@/core/presentations/components/select-input";
 import { Badge } from "@/core/presentations/components/badge";
 import { DataCard, DataCardRow } from "@/core/presentations/components/data-card";
 import { Modal } from "@/core/presentations/components/modal";
-import { AddTransactionWizard } from "@/core/presentations/components/add-transaction-wizard/add-transaction-wizard";
+import { AddFlow } from "@/core/presentations/components/add-flow/add-flow";
 import { formatCurrency } from "@/core/helpers/format-currency";
 import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
 import { TransactionEntity } from "@/features/transaction/domain/entities/transaction";
 import { DateTime } from "luxon";
 
-export function TransactionListImpl() {
+export function ActivityListImpl() {
   const isMobile = useIsMobile();
   const [assetFilter, setAssetFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
-  const [createOpen, setCreateOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState<TransactionEntity | null>(null);
 
   const { transactions, loading, error } = useListTransactions({
@@ -47,7 +47,10 @@ export function TransactionListImpl() {
     return <ErrorDisplay>{error.message}</ErrorDisplay>;
   }
 
-  const assetOptions = (assets ?? []).map((a) => ({ label: `${a.name}${a.ticker ? ` (${a.ticker})` : ""}`, value: a.id }));
+  const assetOptions = (assets ?? []).map((a) => ({
+    label: `${a.name}${a.ticker ? ` (${a.ticker})` : ""}`,
+    value: a.id,
+  }));
   const typeOptions = (transactionTypes ?? []).map((t) => ({ label: t.name, value: t.id }));
 
   return (
@@ -70,16 +73,16 @@ export function TransactionListImpl() {
       </div>
 
       <SectionCard
-        title="All Transactions"
+        title="All Activity"
         headerAction={
-          <FilledButton type="button" onClick={() => setCreateOpen(true)} className="w-auto">
-            Add Transaction
+          <FilledButton type="button" onClick={() => setAddOpen(true)} className="w-auto">
+            Record Activity
           </FilledButton>
         }
         bodyClassName=""
       >
         {transactions.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-500">No transactions found.</p>
+          <p className="py-8 text-center text-sm text-gray-500">No activity found.</p>
         ) : isMobile ? (
           <div className="space-y-3 p-4">
             {transactions.map((tx) => (
@@ -88,7 +91,9 @@ export function TransactionListImpl() {
                   <div>
                     <div className="font-medium text-gray-900">{tx.assetName ?? "\u2014"}</div>
                     <div className="mt-0.5 flex items-center gap-1.5">
-                      <span className="text-xs text-gray-400">{tx.transactionDate.toLocaleString(DateTime.DATE_MED)}</span>
+                      <span className="text-xs text-gray-400">
+                        {tx.transactionDate.toLocaleString(DateTime.DATE_MED)}
+                      </span>
                       {tx.transactionTypeName && <Badge>{tx.transactionTypeName}</Badge>}
                     </div>
                   </div>
@@ -144,7 +149,11 @@ export function TransactionListImpl() {
       </SectionCard>
 
       {selectedTx && (
-        <Modal open={!!selectedTx} onClose={() => setSelectedTx(null)} title={selectedTx.assetName ?? "Transaction Details"}>
+        <Modal
+          open={!!selectedTx}
+          onClose={() => setSelectedTx(null)}
+          title={selectedTx.assetName ?? "Activity Details"}
+        >
           <div className="space-y-3">
             <DataCardRow label="Date" value={selectedTx.transactionDate.toLocaleString(DateTime.DATE_MED)} />
             <DataCardRow label="Type" value={selectedTx.transactionTypeName ?? "\u2014"} />
@@ -157,7 +166,7 @@ export function TransactionListImpl() {
         </Modal>
       )}
 
-      <AddTransactionWizard open={createOpen} onClose={() => setCreateOpen(false)} />
+      <AddFlow open={addOpen} onClose={() => setAddOpen(false)} />
     </>
   );
 }

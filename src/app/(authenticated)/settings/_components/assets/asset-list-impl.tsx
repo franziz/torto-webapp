@@ -13,7 +13,7 @@ import { SelectInput } from "@/core/presentations/components/select-input";
 import { Badge } from "@/core/presentations/components/badge";
 import { DataCard, DataCardRow } from "@/core/presentations/components/data-card";
 import { Modal } from "@/core/presentations/components/modal";
-import { CreateAssetModal } from "@/app/(authenticated)/wealth/assets/_components/create-asset-modal";
+import { CreateAssetModal } from "@/app/(authenticated)/settings/_components/assets/create-asset-modal";
 import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
 import { AssetEntity } from "@/features/asset/domain/entities/asset";
 

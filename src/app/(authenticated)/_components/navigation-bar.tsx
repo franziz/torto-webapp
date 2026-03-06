@@ -4,24 +4,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   HomeIcon,
-  BanknotesIcon,
-  RectangleStackIcon,
-  ArrowsRightLeftIcon,
+  ChartBarIcon,
+  ClockIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {
   HomeIcon as HomeIconSolid,
-  BanknotesIcon as BanknotesIconSolid,
-  RectangleStackIcon as RectangleStackIconSolid,
-  ArrowsRightLeftIcon as ArrowsRightLeftIconSolid,
+  ChartBarIcon as ChartBarIconSolid,
+  ClockIcon as ClockIconSolid,
+  Cog6ToothIcon as Cog6ToothIconSolid,
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { TortoLogo } from "@/core/presentations/components/torto-logo";
 
 const NAV_ITEMS = [
-  { href: "/home", label: "Dashboard", Icon: HomeIcon, ActiveIcon: HomeIconSolid },
-  { href: "/wealth/accounts", label: "Accounts", Icon: BanknotesIcon, ActiveIcon: BanknotesIconSolid },
-  { href: "/wealth/assets", label: "Assets", Icon: RectangleStackIcon, ActiveIcon: RectangleStackIconSolid },
-  { href: "/wealth/transactions", label: "Transactions", Icon: ArrowsRightLeftIcon, ActiveIcon: ArrowsRightLeftIconSolid },
+  { href: "/home", label: "Home", Icon: HomeIcon, ActiveIcon: HomeIconSolid },
+  { href: "/investments", label: "Investments", Icon: ChartBarIcon, ActiveIcon: ChartBarIconSolid },
+  { href: "/activity", label: "Activity", Icon: ClockIcon, ActiveIcon: ClockIconSolid },
+  { href: "/settings", label: "Settings", Icon: Cog6ToothIcon, ActiveIcon: Cog6ToothIconSolid },
 ];
 
 export function NavigationBar() {

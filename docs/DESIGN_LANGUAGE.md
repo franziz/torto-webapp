@@ -416,10 +416,10 @@ import { XCircleIcon } from "@heroicons/react/20/solid";     // Small inline
 ### Navigation Icon Pairs
 
 Each nav item uses **outline** (inactive) and **solid** (active) variants:
-- `HomeIcon` — Dashboard
-- `BanknotesIcon` — Accounts
-- `RectangleStackIcon` — Assets
-- `ArrowsRightLeftIcon` — Transactions
+- `HomeIcon` — Home
+- `ChartBarIcon` — Investments
+- `ClockIcon` — Activity
+- `Cog6ToothIcon` — Settings
 
 ---
 

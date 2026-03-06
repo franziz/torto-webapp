@@ -7,12 +7,10 @@ import { SelectInput } from "@/core/presentations/components/select-input";
 import { TextareaInput } from "@/core/presentations/components/textarea-input";
 import { FilledButton } from "@/core/presentations/components/filled-button";
 import { OutlinedButton } from "@/core/presentations/components/outlined-button";
-import { useUpdateAccount } from "@/features/account/presentation/hooks/use-update-account";
-import { UpdateAccountUseCaseParams } from "@/features/account/domain/usecases/update-account.usecases";
-import { AccountEntity } from "@/features/account/domain/entities/account";
+import { useCreateAccount } from "@/features/account/presentation/hooks/use-create-account";
+import { CreateAccountUseCaseParams } from "@/features/account/domain/usecases/create-account.usecases";
 
-type EditAccountModalProps = {
-  account: AccountEntity;
+type CreateAccountModalProps = {
   open: boolean;
   onClose: () => void;
 };
@@ -27,29 +25,32 @@ const CURRENCY_OPTIONS = [
   { label: "IDR", value: "IDR" },
 ];
 
-export function EditAccountModal(props: EditAccountModalProps) {
-  const { trigger, loading } = useUpdateAccount();
-  const [name, setName] = useState(props.account.name);
-  const [country, setCountry] = useState(props.account.country);
-  const [currency, setCurrency] = useState(props.account.currency);
-  const [description, setDescription] = useState(props.account.description ?? "");
+export function CreateAccountModal(props: CreateAccountModalProps) {
+  const { trigger, loading } = useCreateAccount();
+  const [name, setName] = useState("");
+  const [country, setCountry] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await trigger(
-      new UpdateAccountUseCaseParams({
-        id: props.account.id,
+      new CreateAccountUseCaseParams({
         name,
         country,
         currency,
         description: description || undefined,
       }),
     );
+    setName("");
+    setCountry("");
+    setCurrency("");
+    setDescription("");
     props.onClose();
   };
 
   return (
-    <Modal open={props.open} onClose={props.onClose} title="Edit Account">
+    <Modal open={props.open} onClose={props.onClose} title="Add Account">
       <form onSubmit={handleSubmit} className="space-y-4">
         <TextInput label="Name" value={name} onChange={setName} required placeholder="Account name" />
         <SelectInput
@@ -68,13 +69,18 @@ export function EditAccountModal(props: EditAccountModalProps) {
           required
           placeholder="Select currency"
         />
-        <TextareaInput label="Description" value={description} onChange={setDescription} placeholder="Optional description" />
+        <TextareaInput
+          label="Description"
+          value={description}
+          onChange={setDescription}
+          placeholder="Optional description"
+        />
         <div className="flex gap-x-3 pt-2">
           <OutlinedButton type="button" onClick={props.onClose}>
             Cancel
           </OutlinedButton>
           <FilledButton type="submit" loading={loading}>
-            Save
+            Create
           </FilledButton>
         </div>
       </form>

@@ -70,7 +70,12 @@ export function CreateAssetModal(props: CreateAssetModalProps) {
           required
           placeholder="Select asset type"
         />
-        <TextareaInput label="Description" value={description} onChange={setDescription} placeholder="Optional description" />
+        <TextareaInput
+          label="Description"
+          value={description}
+          onChange={setDescription}
+          placeholder="Optional description"
+        />
         <div className="flex gap-x-3 pt-2">
           <OutlinedButton type="button" onClick={props.onClose}>
             Cancel

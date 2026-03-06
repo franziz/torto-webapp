@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { useGetPortfolioSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-summary";
 import { useGetPortfolioConvertedSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-converted-summary";
-import { useListPositions } from "@/features/position/presentation/hooks/use-list-positions";
+import { useGetTopHoldings } from "@/features/portfolio/presentation/hooks/use-get-top-holdings";
 import { useGetPortfolioByAssetType } from "@/features/portfolio/presentation/hooks/use-get-portfolio-by-asset-type";
 import { useListCurrencies } from "@/features/currency/presentation/hooks/use-list-currencies";
 import { CurrencyTabs, ALL_TAB } from "@/core/presentations/components/currency-tabs";
@@ -41,7 +42,6 @@ export function MobileDashboard() {
 
   const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
   const [displayCurrency, setDisplayCurrency] = useState<string | null>(null);
-  const [showAllHoldings, setShowAllHoldings] = useState(false);
 
   const isAllMode = selectedCurrency === ALL_TAB;
 
@@ -54,16 +54,16 @@ export function MobileDashboard() {
   const activeDisplayCurrency =
     displayCurrency && displayCurrencyOptions.includes(displayCurrency) ? displayCurrency : nativeCurrencies[0];
 
-  const { data: convertedSummary } = useGetPortfolioConvertedSummary(activeDisplayCurrency ?? null);
+  const { data: convertedSummary } = useGetPortfolioConvertedSummary(isAllMode ? (activeDisplayCurrency ?? null) : null);
 
-  const { positions, loading: positionsLoading } = useListPositions({
-    page: 1,
-    limit: showAllHoldings ? 50 : 5,
-  });
+  const topHoldingsParams = isAllMode
+    ? { displayCurrency: activeDisplayCurrency ?? undefined, limit: 5 }
+    : { currency: activeCurrency && activeCurrency !== ALL_TAB ? activeCurrency : undefined, limit: 5 };
+  const { holdings: topHoldings, loading: holdingsLoading } = useGetTopHoldings(topHoldingsParams);
 
   const { data: byAssetType, loading: assetTypeLoading } = useGetPortfolioByAssetType();
 
-  const showDisplaySelector = isAllMode || displayCurrencyOptions.length > 1;
+  const showDisplaySelector = isAllMode;
 
   // Hero values
   const hero = useMemo(() => {
@@ -98,11 +98,8 @@ export function MobileDashboard() {
     return null;
   }, [isAllMode, convertedSummary, summaryData, activeCurrency]);
 
-  // Sort positions by currentValue desc
-  const sortedPositions = useMemo(() => {
-    if (!positions) return [];
-    return [...positions].sort((a, b) => b.currentValue - a.currentValue);
-  }, [positions]);
+  // Top holdings are already sorted by the server
+  const displayHoldings = topHoldings ?? [];
 
   // Donut chart items
   const assetTypeItems = useMemo(() => {
@@ -230,28 +227,30 @@ export function MobileDashboard() {
       {/* Top Holdings */}
       <div>
         <h3 className="mb-3 text-sm font-semibold text-gray-900">Top Holdings</h3>
-        {positionsLoading ? (
+        {holdingsLoading ? (
           <div className="flex justify-center py-8">
             <Spinner />
           </div>
-        ) : sortedPositions.length === 0 ? (
+        ) : displayHoldings.length === 0 ? (
           <p className="text-sm text-gray-500">No holdings yet.</p>
         ) : (
           <div className="space-y-2">
-            {sortedPositions.map((p) => {
-              const returnPct = p.totalCost > 0 ? (p.totalReturn / p.totalCost) * 100 : 0;
-              const isPositive = p.totalReturn >= 0;
+            {displayHoldings.map((h) => {
+              const displayValue = h.convertedValue ?? h.currentValue;
+              const displayCcy = h.convertedValue != null && activeDisplayCurrency ? activeDisplayCurrency : h.currency;
+              const returnPct = h.totalCost > 0 ? (h.totalReturn / h.totalCost) * 100 : 0;
+              const isPositive = h.totalReturn >= 0;
               return (
-                <DataCard key={p.id}>
+                <DataCard key={h.id}>
                   <div className="flex items-start justify-between">
-                    <span className="font-medium text-gray-900">{p.assetName ?? p.assetTicker ?? p.assetId}</span>
-                    <span className="font-medium text-gray-900">{formatCurrency(p.currentValue, p.currency)}</span>
+                    <span className="font-medium text-gray-900">{h.assetName ?? h.assetTicker ?? h.id}</span>
+                    <span className="font-medium text-gray-900">{formatCurrency(displayValue, displayCcy)}</span>
                   </div>
                   <div className="mt-1 flex items-center justify-between">
-                    <Badge>{p.assetTypeName ?? "Other"}</Badge>
+                    <Badge>{h.assetTypeName ?? "Other"}</Badge>
                     <span className={`text-sm font-medium ${isPositive ? "text-green-600" : "text-red-600"}`}>
                       {isPositive ? "+" : ""}
-                      {formatCurrency(p.totalReturn, p.currency)} ({isPositive ? "+" : ""}
+                      {formatCurrency(h.totalReturn, h.currency)} ({isPositive ? "+" : ""}
                       {returnPct.toFixed(1)}%)
                     </span>
                   </div>
@@ -260,13 +259,13 @@ export function MobileDashboard() {
             })}
           </div>
         )}
-        {positions && positions.length >= 5 && (
-          <button
-            className="mt-3 w-full text-center text-sm font-medium text-blue-600 active:text-blue-800"
-            onClick={() => setShowAllHoldings((v) => !v)}
+        {displayHoldings.length >= 5 && (
+          <Link
+            href="/investments"
+            className="mt-3 block w-full text-center text-sm font-medium text-blue-600 active:text-blue-800"
           >
-            {showAllHoldings ? "Show less" : "See all holdings →"}
-          </button>
+            See all holdings &rarr;
+          </Link>
         )}
       </div>
 

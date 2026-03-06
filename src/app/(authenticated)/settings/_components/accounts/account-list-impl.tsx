@@ -9,9 +9,9 @@ import { Table } from "@/core/presentations/components/table/table";
 import { FilledButton } from "@/core/presentations/components/filled-button";
 import { DataCard, DataCardRow } from "@/core/presentations/components/data-card";
 import { Modal } from "@/core/presentations/components/modal";
-import { CreateAccountModal } from "@/app/(authenticated)/wealth/accounts/_components/create-account-modal";
-import { EditAccountModal } from "@/app/(authenticated)/wealth/accounts/_components/edit-account-modal";
-import { DeleteAccountDialog } from "@/app/(authenticated)/wealth/accounts/_components/delete-account-dialog";
+import { CreateAccountModal } from "@/app/(authenticated)/settings/_components/accounts/create-account-modal";
+import { EditAccountModal } from "@/app/(authenticated)/settings/_components/accounts/edit-account-modal";
+import { DeleteAccountDialog } from "@/app/(authenticated)/settings/_components/accounts/delete-account-dialog";
 import { AccountEntity } from "@/features/account/domain/entities/account";
 import { BanknotesIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
@@ -76,14 +76,20 @@ export function AccountListImpl() {
                   <div className="flex items-center gap-x-3">
                     <button
                       type="button"
-                      onClick={(e) => { e.stopPropagation(); setEditAccount(account); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditAccount(account);
+                      }}
                       className="p-1.5 text-gray-400 hover:text-primary-300"
                     >
                       <PencilSquareIcon className="size-5" />
                     </button>
                     <button
                       type="button"
-                      onClick={(e) => { e.stopPropagation(); setDeleteAccount(account); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleteAccount(account);
+                      }}
                       className="p-1.5 text-gray-400 hover:text-red-500"
                     >
                       <TrashIcon className="size-5" />
@@ -159,7 +165,11 @@ export function AccountListImpl() {
         <EditAccountModal account={editAccount} open={!!editAccount} onClose={() => setEditAccount(null)} />
       )}
       {deleteAccount && (
-        <DeleteAccountDialog account={deleteAccount} open={!!deleteAccount} onClose={() => setDeleteAccount(null)} />
+        <DeleteAccountDialog
+          account={deleteAccount}
+          open={!!deleteAccount}
+          onClose={() => setDeleteAccount(null)}
+        />
       )}
     </>
   );
