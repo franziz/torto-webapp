@@ -1,0 +1,100 @@
+import { AbstractEntity } from "@/core/resources/entity";
+
+interface HoldingEntityConstructor {
+  id: string;
+  assetId: string;
+  assetName?: string;
+  assetTicker?: string;
+  assetExchange?: string;
+  assetTypeCode?: string;
+  assetTypeName?: string;
+  accountName?: string;
+  accountCountry?: string;
+  currency: string;
+  totalUnits: number;
+  totalCost: number;
+  averageCostPerUnit: number;
+  realizedGain: number;
+  totalDividends: number;
+  totalInterest: number;
+  unrealizedGain?: number;
+  totalIncome?: number;
+  capitalReturn?: number;
+  totalReturn?: number;
+  manualCurrentPrice?: number;
+  manualPriceUpdatedAt?: string;
+  marketPrice?: number;
+  marketPriceUpdatedAt?: string;
+  effectivePrice?: number;
+  currentValue: number;
+  createdAt?: string;
+  updatedAt?: string;
+  convertedValue?: number;
+  convertedTotalCost?: number;
+}
+
+export class HoldingEntity implements AbstractEntity {
+  public id: string;
+  public assetId: string;
+  public assetName?: string;
+  public assetTicker?: string;
+  public assetExchange?: string;
+  public assetTypeCode?: string;
+  public assetTypeName?: string;
+  public accountName?: string;
+  public accountCountry?: string;
+  public currency: string;
+  public totalUnits: number;
+  public totalCost: number;
+  public averageCostPerUnit: number;
+  public realizedGain: number;
+  public totalDividends: number;
+  public totalInterest: number;
+  public unrealizedGain?: number;
+  public totalIncome?: number;
+  public capitalReturn?: number;
+  public totalReturn?: number;
+  public manualCurrentPrice?: number;
+  public manualPriceUpdatedAt?: string;
+  public marketPrice?: number;
+  public marketPriceUpdatedAt?: string;
+  public effectivePrice?: number;
+  public currentValue: number;
+  public createdAt?: string;
+  public updatedAt?: string;
+  public convertedValue?: number;
+  public convertedTotalCost?: number;
+
+  constructor(args: HoldingEntityConstructor) {
+    this.id = args.id;
+    this.assetId = args.assetId;
+    this.assetName = args.assetName;
+    this.assetTicker = args.assetTicker;
+    this.assetExchange = args.assetExchange;
+    this.assetTypeCode = args.assetTypeCode;
+    this.assetTypeName = args.assetTypeName;
+    this.accountName = args.accountName;
+    this.accountCountry = args.accountCountry;
+    this.currency = args.currency;
+    this.totalUnits = args.totalUnits;
+    this.totalCost = args.totalCost;
+    this.averageCostPerUnit = args.averageCostPerUnit;
+    this.realizedGain = args.realizedGain;
+    this.totalDividends = args.totalDividends;
+    this.totalInterest = args.totalInterest;
+    this.unrealizedGain = args.unrealizedGain;
+    this.totalIncome = args.totalIncome;
+    this.capitalReturn = args.capitalReturn;
+    this.totalReturn = args.totalReturn;
+    this.manualCurrentPrice = args.manualCurrentPrice;
+    this.manualPriceUpdatedAt = args.manualPriceUpdatedAt;
+    this.marketPrice = args.marketPrice;
+    this.marketPriceUpdatedAt = args.marketPriceUpdatedAt;
+    this.effectivePrice = args.effectivePrice;
+    this.currentValue = args.currentValue;
+    this.createdAt = args.createdAt;
+    this.updatedAt = args.updatedAt;
+    this.convertedValue = args.convertedValue;
+    this.convertedTotalCost = args.convertedTotalCost;
+  }
+}
