@@ -39,10 +39,10 @@ export function DashboardClient() {
     ? displayCurrency
     : nativeCurrencies[0];
 
-  // Fetch converted summary to get exchange rates for combined breakdown
-  const { data: convertedSummary } = useGetPortfolioConvertedSummary(activeDisplayCurrency ?? null);
+  // Fetch converted summary only in All mode (for combined breakdown + display currency stats)
+  const { data: convertedSummary } = useGetPortfolioConvertedSummary(isAllMode ? (activeDisplayCurrency ?? null) : null);
 
-  const showDisplaySelector = isAllMode || displayCurrencyOptions.length > 1;
+  const showDisplaySelector = isAllMode;
 
   return (
     <div className="space-y-6">
@@ -69,7 +69,10 @@ export function DashboardClient() {
           )}
         </div>
       </div>
-      <PortfolioSummaryImpl displayCurrency={activeDisplayCurrency ?? null} />
+      <PortfolioSummaryImpl
+        selectedCurrency={isAllMode ? null : (activeCurrency !== ALL_TAB ? activeCurrency ?? null : null)}
+        displayCurrency={isAllMode ? (activeDisplayCurrency ?? null) : null}
+      />
       <PortfolioBreakdownImpl
         selectedCurrency={isAllMode ? null : (activeCurrency ?? null)}
         combinedMode={isAllMode}
