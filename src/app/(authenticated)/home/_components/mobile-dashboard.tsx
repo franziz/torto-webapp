@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { useGetPortfolioSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-summary";
 import { useGetPortfolioConvertedSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-converted-summary";
 import { useGetTopHoldings } from "@/features/portfolio/presentation/hooks/use-get-top-holdings";
@@ -258,14 +257,6 @@ export function MobileDashboard() {
               );
             })}
           </div>
-        )}
-        {displayHoldings.length >= 5 && (
-          <Link
-            href="/investments"
-            className="mt-3 block w-full text-center text-sm font-medium text-blue-600 active:text-blue-800"
-          >
-            See all holdings &rarr;
-          </Link>
         )}
       </div>
 

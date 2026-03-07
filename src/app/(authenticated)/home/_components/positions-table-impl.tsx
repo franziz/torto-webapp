@@ -17,9 +17,13 @@ import { UpdateCurrentPriceUseCaseParams } from "@/features/position/domain/usec
 import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
 import { PositionEntity } from "@/features/position/domain/entities/position";
 
-export function PositionsTableImpl() {
+type PositionsTableImplProps = {
+  filterCurrency?: string | null;
+};
+
+export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) {
   const isMobile = useIsMobile();
-  const { positions, loading, error } = useListPositions({ page: 1, limit: 50 });
+  const { positions, loading, error } = useListPositions({ page: 1, limit: 50, currency: filterCurrency ?? undefined });
   const { trigger } = useUpdateCurrentPrice();
   const [selectedPosition, setSelectedPosition] = useState<PositionEntity | null>(null);
   const [assetTypeFilter, setAssetTypeFilter] = useState("");
@@ -46,9 +50,10 @@ export function PositionsTableImpl() {
   }, [positions, assetTypeFilter]);
 
   const totals = useMemo(() => {
-    const byCurrency = new Map<string, { currentValue: number; totalReturn: number }>();
+    const byCurrency = new Map<string, { totalCost: number; currentValue: number; totalReturn: number }>();
     for (const pos of filteredPositions) {
-      const entry = byCurrency.get(pos.currency) ?? { currentValue: 0, totalReturn: 0 };
+      const entry = byCurrency.get(pos.currency) ?? { totalCost: 0, currentValue: 0, totalReturn: 0 };
+      entry.totalCost += pos.totalCost;
       entry.currentValue += pos.currentValue;
       entry.totalReturn += pos.totalReturn;
       byCurrency.set(pos.currency, entry);
@@ -119,11 +124,21 @@ export function PositionsTableImpl() {
                   <div className="rounded-lg border-2 border-gray-300 bg-gray-50 p-4">
                     <div className="text-xs font-semibold text-gray-500 uppercase">Total</div>
                     {totals.map((t) => (
-                      <div key={t.currency} className="mt-1 flex items-center justify-between">
-                        <span className="text-sm font-semibold text-gray-900">{formatCurrency(t.currentValue, t.currency)}</span>
-                        <span className={`text-xs font-medium ${t.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {t.totalReturn >= 0 ? "+" : ""}{formatCurrency(t.totalReturn, t.currency).replace("-", "\u2011")}
-                        </span>
+                      <div key={t.currency} className="mt-1 space-y-0.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500">Cost</span>
+                          <span className="text-sm text-gray-700">{formatCurrency(t.totalCost, t.currency)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500">Value</span>
+                          <span className="text-sm font-semibold text-gray-900">{formatCurrency(t.currentValue, t.currency)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500">Return</span>
+                          <span className={`text-xs font-medium ${t.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
+                            {t.totalReturn >= 0 ? "+" : ""}{formatCurrency(t.totalReturn, t.currency).replace("-", "\u2011")}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -148,6 +163,7 @@ export function PositionsTableImpl() {
                   onSave={handleSavePrice}
                 />
               } />
+              <DataCardRow label="Total Cost" value={formatCurrency(selectedPosition.totalCost, selectedPosition.currency)} />
               <DataCardRow label="Current Value" value={formatCurrency(selectedPosition.currentValue, selectedPosition.currency)} />
               <DataCardRow label="Total Return" value={
                 <span className={selectedPosition.totalReturn >= 0 ? "text-green-600" : "text-red-600"}>
@@ -176,6 +192,7 @@ export function PositionsTableImpl() {
                 { node: "Account", hideOnMobile: true },
                 { node: "Units", hideOnMobile: true, className: "text-right" },
                 { node: "Avg Cost / Mkt Price", hideOnMobile: true, className: "text-right" },
+                { node: "Total Cost", hideOnMobile: true, className: "text-right" },
                 { node: "Current Value", hideOnMobile: false, className: "text-right" },
                 { node: "Total Return", hideOnMobile: false, className: "text-right" },
               ]}
@@ -216,6 +233,11 @@ export function PositionsTableImpl() {
                     className: "text-right",
                   },
                   {
+                    node: <span className="whitespace-nowrap">{formatCurrency(pos.totalCost, pos.currency)}</span>,
+                    hideOnMobile: true,
+                    className: "text-right",
+                  },
+                  {
                     node: <span className="whitespace-nowrap font-medium">{formatCurrency(pos.currentValue, pos.currency)}</span>,
                     hideOnMobile: false,
                     className: "text-right",
@@ -236,6 +258,17 @@ export function PositionsTableImpl() {
               <Table.Footer
                 cells={[
                   { node: "Total", hideOnMobile: false, colSpan: 4, className: "text-left" },
+                  {
+                    node: (
+                      <div className="space-y-0.5">
+                        {totals.map((t) => (
+                          <div key={t.currency} className="whitespace-nowrap">{formatCurrency(t.totalCost, t.currency)}</div>
+                        ))}
+                      </div>
+                    ),
+                    hideOnMobile: true,
+                    className: "text-right",
+                  },
                   {
                     node: (
                       <div className="space-y-0.5">

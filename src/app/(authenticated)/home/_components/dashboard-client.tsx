@@ -8,6 +8,7 @@ import { CurrencyTabs, ALL_TAB } from "@/core/presentations/components/currency-
 import { SelectInput } from "@/core/presentations/components/select-input";
 import { PortfolioSummaryImpl } from "@/app/(authenticated)/home/_components/portfolio-summary-impl";
 import { PortfolioBreakdownImpl } from "@/app/(authenticated)/home/_components/portfolio-breakdown-impl";
+import { PositionsTableImpl } from "@/app/(authenticated)/home/_components/positions-table-impl";
 import { AddTransactionButton } from "@/app/(authenticated)/home/_components/add-transaction-button";
 
 export function DashboardClient() {
@@ -79,6 +80,7 @@ export function DashboardClient() {
         displayCurrency={isAllMode ? (activeDisplayCurrency ?? null) : null}
         exchangeRates={isAllMode ? (convertedSummary?.exchangeRatesUsed ?? null) : null}
       />
+      <PositionsTableImpl filterCurrency={isAllMode ? null : (activeCurrency !== ALL_TAB ? activeCurrency ?? null : null)} />
     </div>
   );
 }
