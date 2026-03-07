@@ -8,6 +8,7 @@ import { Spinner } from "@/core/presentations/components/spinner";
 import { ErrorDisplay } from "@/core/presentations/components/error-display";
 import { DonutChart } from "@/core/presentations/components/donut-chart";
 import { formatCompactCurrency } from "@/core/helpers/format-currency";
+import { getExchangeRate } from "@/core/helpers/get-exchange-rate";
 
 type PortfolioBreakdownImplProps = {
   selectedCurrency: string | null;
@@ -16,15 +17,6 @@ type PortfolioBreakdownImplProps = {
   exchangeRates?: Record<string, number> | null;
 };
 
-function getRate(from: string, to: string, rates: Record<string, number>): number {
-  if (from === to) return 1;
-  const key = `${from}_${to}`;
-  if (rates[key]) return rates[key];
-  const reverseKey = `${to}_${from}`;
-  if (rates[reverseKey]) return 1 / rates[reverseKey];
-  return 1;
-}
-
 function aggregateByLabel(
   items: { label: string; currency: string; currentValue: number }[],
   targetCurrency: string,
@@ -32,7 +24,8 @@ function aggregateByLabel(
 ): { label: string; value: number; formattedValue: string }[] {
   const map = new Map<string, number>();
   for (const item of items) {
-    const rate = getRate(item.currency, targetCurrency, rates);
+    const rate = getExchangeRate(item.currency, targetCurrency, rates);
+    if (rate === null) continue;
     const converted = item.currentValue * rate;
     map.set(item.label, (map.get(item.label) ?? 0) + converted);
   }

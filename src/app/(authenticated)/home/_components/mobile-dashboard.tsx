@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useGetPortfolioSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-summary";
+import { useMemo } from "react";
 import { useGetPortfolioConvertedSummary } from "@/features/portfolio/presentation/hooks/use-get-portfolio-converted-summary";
 import { useGetTopHoldings } from "@/features/portfolio/presentation/hooks/use-get-top-holdings";
 import { useGetPortfolioByAssetType } from "@/features/portfolio/presentation/hooks/use-get-portfolio-by-asset-type";
-import { useListCurrencies } from "@/features/currency/presentation/hooks/use-list-currencies";
 import { CurrencyTabs, ALL_TAB } from "@/core/presentations/components/currency-tabs";
 import { SelectInput } from "@/core/presentations/components/select-input";
 import { DataCard } from "@/core/presentations/components/data-card";
@@ -15,43 +13,23 @@ import { DonutChart } from "@/core/presentations/components/donut-chart";
 import { Spinner } from "@/core/presentations/components/spinner";
 import { ErrorDisplay } from "@/core/presentations/components/error-display";
 import { formatCurrency, formatCompactCurrency } from "@/core/helpers/format-currency";
-
-function getRate(from: string, to: string, rates: Record<string, number>): number {
-  if (from === to) return 1;
-  const key = `${from}_${to}`;
-  if (rates[key]) return rates[key];
-  const reverseKey = `${to}_${from}`;
-  if (rates[reverseKey]) return 1 / rates[reverseKey];
-  return 1;
-}
+import { getExchangeRate } from "@/core/helpers/get-exchange-rate";
+import { useCurrencySelector } from "@/core/presentations/hooks/use-currency-selector";
 
 export function MobileDashboard() {
-  const { data: summaryData, loading: summaryLoading, error: summaryError } = useGetPortfolioSummary();
-  const { currencies } = useListCurrencies();
-
-  const displayCurrencyOptions = useMemo(() => {
-    if (!currencies) return [];
-    return currencies.map((c) => c.code);
-  }, [currencies]);
-
-  const nativeCurrencies = useMemo(() => {
-    if (!summaryData) return [];
-    return [...new Set(summaryData.map((s) => s.currency))];
-  }, [summaryData]);
-
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
-  const [displayCurrency, setDisplayCurrency] = useState<string | null>(null);
-
-  const isAllMode = selectedCurrency === ALL_TAB;
-
-  const activeCurrency = isAllMode
-    ? ALL_TAB
-    : selectedCurrency && nativeCurrencies.includes(selectedCurrency)
-      ? selectedCurrency
-      : nativeCurrencies[0];
-
-  const activeDisplayCurrency =
-    displayCurrency && displayCurrencyOptions.includes(displayCurrency) ? displayCurrency : nativeCurrencies[0];
+  const {
+    summaryData,
+    summaryLoading,
+    summaryError,
+    nativeCurrencies,
+    displayCurrencyOptions,
+    setSelectedCurrency,
+    setDisplayCurrency,
+    isAllMode,
+    activeCurrency,
+    activeDisplayCurrency,
+    showDisplaySelector,
+  } = useCurrencySelector();
 
   const { data: convertedSummary } = useGetPortfolioConvertedSummary(isAllMode ? (activeDisplayCurrency ?? null) : null);
 
@@ -60,9 +38,7 @@ export function MobileDashboard() {
     : { currency: activeCurrency && activeCurrency !== ALL_TAB ? activeCurrency : undefined, limit: 5 };
   const { holdings: topHoldings, loading: holdingsLoading } = useGetTopHoldings(topHoldingsParams);
 
-  const { data: byAssetType, loading: assetTypeLoading } = useGetPortfolioByAssetType();
-
-  const showDisplaySelector = isAllMode;
+  const { data: byAssetType } = useGetPortfolioByAssetType();
 
   // Hero values
   const hero = useMemo(() => {
@@ -112,7 +88,8 @@ export function MobileDashboard() {
       }));
       const map = new Map<string, number>();
       for (const item of items) {
-        const rate = getRate(item.currency, activeDisplayCurrency, convertedSummary.exchangeRatesUsed);
+        const rate = getExchangeRate(item.currency, activeDisplayCurrency, convertedSummary.exchangeRatesUsed);
+        if (rate === null) continue;
         const converted = item.currentValue * rate;
         map.set(item.label, (map.get(item.label) ?? 0) + converted);
       }
@@ -168,7 +145,7 @@ export function MobileDashboard() {
   if (summaryError) return <ErrorDisplay>{summaryError.message}</ErrorDisplay>;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Hero */}
       <div className="px-1">
         {hero ? (
@@ -178,7 +155,7 @@ export function MobileDashboard() {
             </div>
             <div
               className={`mt-0.5 text-sm font-medium ${
-                hero.unrealizedGain !== null && hero.unrealizedGain >= 0 ? "text-green-600" : "text-red-600"
+                hero.unrealizedGain !== null && hero.unrealizedGain >= 0 ? "text-success-300" : "text-error-300"
               }`}
             >
               {hero.unrealizedGain !== null ? (
@@ -247,7 +224,7 @@ export function MobileDashboard() {
                   </div>
                   <div className="mt-1 flex items-center justify-between">
                     <Badge>{h.assetTypeName ?? "Other"}</Badge>
-                    <span className={`text-sm font-medium ${isPositive ? "text-green-600" : "text-red-600"}`}>
+                    <span className={`text-sm font-medium ${isPositive ? "text-success-300" : "text-error-300"}`}>
                       {isPositive ? "+" : ""}
                       {formatCurrency(h.totalReturn, h.currency)} ({isPositive ? "+" : ""}
                       {returnPct.toFixed(1)}%)

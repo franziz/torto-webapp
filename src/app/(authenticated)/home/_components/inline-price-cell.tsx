@@ -16,6 +16,7 @@ export function InlinePriceCell({ positionAssetId, currentPrice, currency, isMar
   const [saving, setSaving] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -41,16 +42,19 @@ export function InlinePriceCell({ positionAssetId, currentPrice, currency, isMar
   };
 
   const handleSave = async () => {
+    if (savingRef.current) return;
     const parsed = parseFloat(inputValue);
     if (isNaN(parsed) || parsed < 0) {
       setEditing(false);
       return;
     }
 
+    savingRef.current = true;
     setSaving(true);
     try {
       await onSave(positionAssetId, parsed);
     } finally {
+      savingRef.current = false;
       setSaving(false);
       setEditing(false);
     }

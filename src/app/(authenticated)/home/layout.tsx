@@ -1,7 +1,3 @@
-"use client";
-
-import { useIsMobile } from "@/core/presentations/hooks/use-is-mobile";
-
 export default function HomeLayout({
   mobileView,
   desktopView,
@@ -9,6 +5,10 @@ export default function HomeLayout({
   mobileView: React.ReactNode;
   desktopView: React.ReactNode;
 }) {
-  const isMobile = useIsMobile();
-  return isMobile ? mobileView : desktopView;
+  return (
+    <>
+      <div className="md:hidden">{mobileView}</div>
+      <div className="hidden md:block">{desktopView}</div>
+    </>
+  );
 }

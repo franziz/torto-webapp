@@ -113,7 +113,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
                       </div>
                       <div className="text-right">
                         <div className="text-sm font-medium">{formatCurrency(pos.currentValue, pos.currency)}</div>
-                        <div className={`text-xs ${pos.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
+                        <div className={`text-xs ${pos.totalReturn >= 0 ? "text-success-300" : "text-error-300"}`}>
                           {formatCurrency(pos.totalReturn, pos.currency).replace("-", "\u2011")}
                         </div>
                       </div>
@@ -135,7 +135,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-gray-500">Return</span>
-                          <span className={`text-xs font-medium ${t.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className={`text-xs font-medium ${t.totalReturn >= 0 ? "text-success-300" : "text-error-300"}`}>
                             {t.totalReturn >= 0 ? "+" : ""}{formatCurrency(t.totalReturn, t.currency).replace("-", "\u2011")}
                           </span>
                         </div>
@@ -166,7 +166,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
               <DataCardRow label="Total Cost" value={formatCurrency(selectedPosition.totalCost, selectedPosition.currency)} />
               <DataCardRow label="Current Value" value={formatCurrency(selectedPosition.currentValue, selectedPosition.currency)} />
               <DataCardRow label="Total Return" value={
-                <span className={selectedPosition.totalReturn >= 0 ? "text-green-600" : "text-red-600"}>
+                <span className={selectedPosition.totalReturn >= 0 ? "text-success-300" : "text-error-300"}>
                   {formatCurrency(selectedPosition.totalReturn, selectedPosition.currency).replace("-", "\u2011")}
                 </span>
               } />
@@ -244,7 +244,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
                   },
                   {
                     node: (
-                      <span className={`whitespace-nowrap ${pos.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className={`whitespace-nowrap ${pos.totalReturn >= 0 ? "text-success-300" : "text-error-300"}`}>
                         {formatCurrency(pos.totalReturn, pos.currency).replace("-", "\u2011")}
                       </span>
                     ),
@@ -284,7 +284,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
                     node: (
                       <div className="space-y-0.5">
                         {totals.map((t) => (
-                          <div key={t.currency} className={`whitespace-nowrap ${t.totalReturn >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          <div key={t.currency} className={`whitespace-nowrap ${t.totalReturn >= 0 ? "text-success-300" : "text-error-300"}`}>
                             {t.totalReturn >= 0 ? "+" : ""}{formatCurrency(t.totalReturn, t.currency).replace("-", "\u2011")}
                           </div>
                         ))}

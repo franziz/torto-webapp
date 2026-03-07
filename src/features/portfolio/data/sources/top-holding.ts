@@ -7,7 +7,6 @@ import { ErrorCodes, ServerError } from "@/core/resources/server-error";
 function extractArray(result: any): Record<string, any>[] {
   if (Array.isArray(result)) return result;
   if (result && Array.isArray(result.data)) return result.data;
-  if (result && typeof result === "object" && Object.keys(result).length > 0) return [result];
   return [];
 }
 

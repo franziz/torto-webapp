@@ -54,9 +54,13 @@ export function TransactionFormStep({ data, onFieldChange, onBack, onSuccess }: 
     const t = parseFloat(data.totalAmount) || 0;
 
     if (lastEdited === "totalAmount") {
-      if (u > 0) onFieldChange("pricePerUnit", (t / u).toFixed(2));
+      if (u > 0) {
+        const next = (t / u).toFixed(2);
+        if (next !== data.pricePerUnit) onFieldChange("pricePerUnit", next);
+      }
     } else {
-      onFieldChange("totalAmount", (u * p).toFixed(2));
+      const next = (u * p).toFixed(2);
+      if (next !== data.totalAmount) onFieldChange("totalAmount", next);
     }
   }, [data.units, data.pricePerUnit, data.totalAmount, lastEdited, formConfig.showUnits]);
 

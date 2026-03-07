@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 
-const query = "(max-width: 639px)";
+const query = "(max-width: 767px)";
 
 function subscribe(callback: () => void) {
   const mql = window.matchMedia(query);
