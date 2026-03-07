@@ -4,13 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   HomeIcon,
-  ChartBarIcon,
   ClockIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {
   HomeIcon as HomeIconSolid,
-  ChartBarIcon as ChartBarIconSolid,
   ClockIcon as ClockIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
 } from "@heroicons/react/24/solid";
@@ -19,7 +17,6 @@ import { TortoLogo } from "@/core/presentations/components/torto-logo";
 
 const NAV_ITEMS = [
   { href: "/home", label: "Home", Icon: HomeIcon, ActiveIcon: HomeIconSolid },
-  { href: "/investments", label: "Investments", Icon: ChartBarIcon, ActiveIcon: ChartBarIconSolid },
   { href: "/activity", label: "Activity", Icon: ClockIcon, ActiveIcon: ClockIconSolid },
   { href: "/settings", label: "Settings", Icon: Cog6ToothIcon, ActiveIcon: Cog6ToothIconSolid },
 ];
