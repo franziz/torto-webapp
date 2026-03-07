@@ -25,7 +25,7 @@ export class TopHoldingServiceImpl implements TopHoldingService {
       if (filter.limit) searchParams.limit = String(filter.limit);
 
       const result = await this.http.request({
-        path: "/api/portfolio/top-holdings",
+        path: "/api/positions/top-holdings",
         method: "GET",
         searchParams,
         session,

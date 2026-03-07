@@ -28,7 +28,7 @@ export class PositionRepositoryImpl implements PositionRepository {
     session: SessionEntity,
   ): Promise<DataState<PaginatedData<PositionEntity>>> {
     try {
-      const result = await this.positionService.list({ page: filter.page, limit: filter.limit }, session);
+      const result = await this.positionService.list({ page: filter.page, limit: filter.limit, currency: filter.currency }, session);
       return new DataSuccess({
         data: result.data.map((model) => model.toEntity()),
         meta: result.meta.toMeta(),

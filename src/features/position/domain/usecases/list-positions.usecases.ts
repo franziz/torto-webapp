@@ -9,10 +9,12 @@ import { ErrorCodes, ServerError } from "@/core/resources/server-error";
 export class ListPositionsUseCaseParams {
   public page?: number;
   public limit?: number;
+  public currency?: string;
 
-  constructor(args: { page?: number; limit?: number }) {
+  constructor(args: { page?: number; limit?: number; currency?: string }) {
     this.page = args.page;
     this.limit = args.limit;
+    this.currency = args.currency;
   }
 }
 
@@ -27,7 +29,7 @@ export class ListPositionsUseCase
   public async execute(params: ListPositionsUseCaseParams): Promise<DataState<PaginatedData<PositionEntity>>> {
     try {
       const session = await this.retrieveSession();
-      return this.positionRepository.list({ page: params.page, limit: params.limit }, session);
+      return this.positionRepository.list({ page: params.page, limit: params.limit, currency: params.currency }, session);
     } catch (err) {
       if (err instanceof ServerError) return new DataFailed(err);
       else return new DataFailed(new ServerError(ErrorCodes.UNKNOWN, { error: err }));

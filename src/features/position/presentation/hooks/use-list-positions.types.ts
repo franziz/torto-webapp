@@ -6,6 +6,7 @@ import { ServerError } from "@/core/resources/server-error";
 export type UseListPositionsParams = {
   page?: number;
   limit?: number;
+  currency?: string;
 };
 
 export type ListPositionsFetcherParams = UseListPositionsParams & {

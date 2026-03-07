@@ -31,7 +31,7 @@ async function ListPositionsFetcher([_, params]: [string, ListPositionsFetcherPa
   const positionRepository = new PositionRepositoryImpl(new PositionServiceImpl(new HttpRequest()));
 
   const useCase = new ListPositionsUseCase(positionRepository, sessionRepository);
-  const useCaseParams = new ListPositionsUseCaseParams({ page: params.page, limit: params.limit });
+  const useCaseParams = new ListPositionsUseCaseParams({ page: params.page, limit: params.limit, currency: params.currency });
 
   const result = await useCase.execute(useCaseParams);
   if (result instanceof DataFailed) throw result.error;

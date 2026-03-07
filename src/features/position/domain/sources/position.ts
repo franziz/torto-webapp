@@ -5,6 +5,7 @@ import { SessionEntity } from "@/features/authentication/domain/entities/session
 export interface ListPositionsServiceFilter {
   page?: number;
   limit?: number;
+  currency?: string;
 }
 
 export interface PositionService {

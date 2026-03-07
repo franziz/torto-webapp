@@ -22,7 +22,7 @@ export class PortfolioServiceImpl implements PortfolioService {
     try {
       const result = await this.http.request(
         {
-          path: "/api/portfolio/summary",
+          path: "/api/positions/summary",
           method: "GET",
           session,
         },
@@ -39,7 +39,7 @@ export class PortfolioServiceImpl implements PortfolioService {
     try {
       const result = await this.http.request(
         {
-          path: "/api/portfolio/by-account",
+          path: "/api/positions/by-account",
           method: "GET",
           session,
         },
@@ -56,7 +56,7 @@ export class PortfolioServiceImpl implements PortfolioService {
     try {
       const result = await this.http.request(
         {
-          path: "/api/portfolio/by-asset-type",
+          path: "/api/positions/by-asset-type",
           method: "GET",
           session,
         },
@@ -73,7 +73,7 @@ export class PortfolioServiceImpl implements PortfolioService {
     try {
       const result = await this.http.request(
         {
-          path: "/api/portfolio/by-country",
+          path: "/api/positions/by-country",
           method: "GET",
           session,
         },
@@ -90,7 +90,7 @@ export class PortfolioServiceImpl implements PortfolioService {
     try {
       const result = await this.http.request(
         {
-          path: "/api/portfolio/summary/converted",
+          path: "/api/positions/summary/converted",
           method: "GET",
           searchParams: { currency },
           session,

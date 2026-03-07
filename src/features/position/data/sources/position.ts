@@ -32,6 +32,7 @@ export class PositionServiceImpl implements PositionService {
       const searchParams: Record<string, string> = {};
       if (filter.page) searchParams.page = String(filter.page);
       if (filter.limit) searchParams.limit = String(filter.limit);
+      if (filter.currency) searchParams.currency = filter.currency;
 
       const result = await this.http.request(
         {
