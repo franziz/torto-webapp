@@ -9,12 +9,15 @@ See [docs/DESIGN_LANGUAGE.md](docs/DESIGN_LANGUAGE.md) for the full UI/UX design
 ## Commands
 
 ```bash
-npm run dev          # Start dev server (Next.js + Turbopack)
+npm run dev          # Start dev server on port 13001 (Next.js + Turbopack)
 npm run build        # Production build
+npm start            # Start production server
 npm run lint         # ESLint
+npm run test:e2e     # Playwright end-to-end tests
+npm run test:e2e:ui  # Playwright tests with UI mode
 ```
 
-No test framework is configured.
+E2e tests live in `e2e/`. Playwright config: `playwright.config.ts`.
 
 ## Tech Stack
 
@@ -49,8 +52,17 @@ Hooks wrap use cases with SWR:
 useListItems → SWR fetcher → ListItemsUseCase → ItemRepositoryImpl → ItemServiceImpl → HTTP
 ```
 
+### Features
+
+`account`, `asset`, `asset-type`, `authentication`, `currency`, `item`, `portfolio`, `position`, `transaction`, `transaction-type`
+
+### Routes (authenticated)
+
+`/home` (dashboard), `/activity`, `/items`, `/settings`
+
 ### Key Patterns
 
+- **Base classes** (`core/resources/`): `AbstractEntity`, `AbstractModel`, `UseCase<ReturnValue, Params>`
 - **DataState pattern**: Use cases return `DataSuccess<T>` or `DataFailed` instead of throwing
 - **Hook return types**: Discriminated unions (`InitialState | LoadedState | ErrorState`)
 - **ServerError + ErrorCodes**: Centralized error registry
@@ -80,16 +92,23 @@ Always use `@/` path alias (maps to `src/`). No relative imports.
 | Repo interfaces | `domain/repositories/{noun}.ts` | `item.ts` |
 | Repo impls | `data/repositories/{noun}.ts` | `item.ts` |
 | Services | `data/sources/{noun}.ts` | `item.ts` |
+| Service interfaces | `domain/sources/{noun}.ts` | `item.ts` |
 
 Directories use kebab-case. Components use kebab-case filenames.
+
+### Environment
+
+Copy `.env.example` to `.env.local`. Required vars: `NEXT_PUBLIC_BASE_API_URL`, Clerk keys (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`).
 
 ### Code Style
 
 - Prettier: 2-space indent, 120 char width
 - `@typescript-eslint/no-explicit-any` is disabled
 - Domain layer must not import from data or presentation layers
+  - **Exception**: `domain/sources/` service interfaces return `*Model` types from `data/models/` — this is intentional
 
 ### Git
 
 - Branch naming: `features/{description}` for new features
 - Always create branches from `dev`
+- Commit messages: conventional commits — `type(scope): description` (e.g., `feat(dashboard):`, `fix(ui):`, `refactor(api):`)
