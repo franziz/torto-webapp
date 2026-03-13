@@ -1,4 +1,4 @@
-export type ActionType = "buy" | "sell" | "deposit" | "dividend" | "interest" | "other";
+export type ActionType = "buy" | "sell" | "deposit" | "dividend" | "interest" | "redemption" | "other";
 
 export interface ActionTypeOption {
   type: ActionType;
@@ -27,6 +27,12 @@ export const ACTION_TYPE_OPTIONS: ActionTypeOption[] = [
     label: "Record Interest",
     description: "Interest earned on cash or bonds",
     transactionTypeCode: "interest",
+  },
+  {
+    type: "redemption",
+    label: "Redeem",
+    description: "Redeem matured fixed-income at face value",
+    transactionTypeCode: "redemption",
   },
   { type: "other", label: "Other", description: "Advanced form with all fields", transactionTypeCode: "" },
 ];
@@ -59,4 +65,65 @@ export const ASSET_TYPE_FORM_CONFIG: Record<string, FormFieldConfig> = {
 export function getFormConfig(assetTypeCode?: string): FormFieldConfig {
   if (!assetTypeCode) return DEFAULT_FORM_CONFIG;
   return ASSET_TYPE_FORM_CONFIG[assetTypeCode] ?? DEFAULT_FORM_CONFIG;
+}
+
+export type PositionActionType = Exclude<ActionType, "other">;
+
+export interface PositionActionConfig {
+  type: PositionActionType;
+  label: string;
+}
+
+export const ASSET_TYPE_ACTIONS: Record<string, PositionActionConfig[]> = {
+  stock: [
+    { type: "buy", label: "Buy More" },
+    { type: "sell", label: "Sell" },
+    { type: "dividend", label: "Record Dividend" },
+  ],
+  etf: [
+    { type: "buy", label: "Buy More" },
+    { type: "sell", label: "Sell" },
+    { type: "dividend", label: "Record Dividend" },
+  ],
+  mutual_fund: [
+    { type: "buy", label: "Buy More" },
+    { type: "sell", label: "Sell" },
+    { type: "dividend", label: "Record Dividend" },
+  ],
+  crypto: [
+    { type: "buy", label: "Buy More" },
+    { type: "sell", label: "Sell" },
+  ],
+  bond: [
+    { type: "buy", label: "Buy More" },
+    { type: "sell", label: "Sell" },
+    { type: "interest", label: "Record Interest" },
+    { type: "redemption", label: "Redeem" },
+  ],
+  cash: [
+    { type: "deposit", label: "Deposit" },
+    { type: "sell", label: "Withdraw" },
+    { type: "interest", label: "Record Interest" },
+  ],
+  savings: [
+    { type: "deposit", label: "Deposit" },
+    { type: "sell", label: "Withdraw" },
+    { type: "interest", label: "Record Interest" },
+  ],
+  time_deposit: [
+    { type: "interest", label: "Record Interest" },
+    { type: "redemption", label: "Redeem" },
+  ],
+};
+
+export function getActionsForAssetType(
+  assetTypeCode?: string,
+  redeemable?: { hasMaturityDate: boolean; hasFaceValue: boolean },
+): PositionActionConfig[] {
+  if (!assetTypeCode) return [];
+  const actions = ASSET_TYPE_ACTIONS[assetTypeCode] ?? [];
+  if (!redeemable?.hasMaturityDate || !redeemable?.hasFaceValue) {
+    return actions.filter((a) => a.type !== "redemption");
+  }
+  return actions;
 }

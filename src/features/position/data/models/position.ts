@@ -1,5 +1,6 @@
 import { AbstractModel } from "@/core/resources/model";
 import { PositionEntity } from "@/features/position/domain/entities/position";
+import { DateTime } from "luxon";
 
 interface PositionModelConstructor {
   id: string;
@@ -23,6 +24,8 @@ interface PositionModelConstructor {
   assetTicker?: string;
   assetTypeCode?: string;
   assetTypeName?: string;
+  assetMaturityDate?: string;
+  assetFaceValue?: number;
   accountName?: string;
   accountCountry?: string;
 }
@@ -49,6 +52,8 @@ export class PositionModel implements AbstractModel {
   public assetTicker?: string;
   public assetTypeCode?: string;
   public assetTypeName?: string;
+  public assetMaturityDate?: string;
+  public assetFaceValue?: number;
   public accountName?: string;
   public accountCountry?: string;
 
@@ -74,6 +79,8 @@ export class PositionModel implements AbstractModel {
     this.assetTicker = args.assetTicker;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
+    this.assetMaturityDate = args.assetMaturityDate;
+    this.assetFaceValue = args.assetFaceValue;
     this.accountName = args.accountName;
     this.accountCountry = args.accountCountry;
   }
@@ -101,6 +108,8 @@ export class PositionModel implements AbstractModel {
       assetTicker: doc["asset_ticker"],
       assetTypeCode: doc["asset_type_code"],
       assetTypeName: doc["asset_type_name"],
+      assetMaturityDate: doc["asset_maturity_date"] ?? undefined,
+      assetFaceValue: doc["asset_face_value"] != null ? Number(doc["asset_face_value"]) : undefined,
       accountName: doc["account_name"],
       accountCountry: doc["account_country"],
     });
@@ -129,6 +138,8 @@ export class PositionModel implements AbstractModel {
       assetTicker: this.assetTicker,
       assetTypeCode: this.assetTypeCode,
       assetTypeName: this.assetTypeName,
+      assetMaturityDate: this.assetMaturityDate ? DateTime.fromISO(this.assetMaturityDate) : undefined,
+      assetFaceValue: this.assetFaceValue,
       accountName: this.accountName,
       accountCountry: this.accountCountry,
     });

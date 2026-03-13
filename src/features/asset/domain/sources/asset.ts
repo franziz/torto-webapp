@@ -15,6 +15,16 @@ export interface CreateAssetServiceParams {
   name: string;
   ticker?: string;
   description?: string;
+  maturityDate?: string;
+  faceValue?: number;
+}
+
+export interface UpdateAssetServiceParams {
+  name: string;
+  ticker?: string;
+  description?: string;
+  maturityDate?: string;
+  faceValue?: number;
 }
 
 export interface AssetService {
@@ -23,5 +33,6 @@ export interface AssetService {
     session: SessionEntity,
   ): Promise<{ data: AssetModel[]; meta: PaginationMetaModel }>;
   create(params: CreateAssetServiceParams, session: SessionEntity): Promise<AssetModel>;
+  update(id: string, params: UpdateAssetServiceParams, session: SessionEntity): Promise<AssetModel>;
   delete(id: string, session: SessionEntity): Promise<void>;
 }

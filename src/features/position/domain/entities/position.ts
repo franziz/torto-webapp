@@ -1,4 +1,5 @@
 import { AbstractEntity } from "@/core/resources/entity";
+import { DateTime } from "luxon";
 
 interface PositionEntityConstructor {
   id: string;
@@ -22,6 +23,8 @@ interface PositionEntityConstructor {
   assetTicker?: string;
   assetTypeCode?: string;
   assetTypeName?: string;
+  assetMaturityDate?: DateTime;
+  assetFaceValue?: number;
   accountName?: string;
   accountCountry?: string;
 }
@@ -48,6 +51,8 @@ export class PositionEntity implements AbstractEntity {
   public assetTicker?: string;
   public assetTypeCode?: string;
   public assetTypeName?: string;
+  public assetMaturityDate?: DateTime;
+  public assetFaceValue?: number;
   public accountName?: string;
   public accountCountry?: string;
 
@@ -73,6 +78,8 @@ export class PositionEntity implements AbstractEntity {
     this.assetTicker = args.assetTicker;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
+    this.assetMaturityDate = args.assetMaturityDate;
+    this.assetFaceValue = args.assetFaceValue;
     this.accountName = args.accountName;
     this.accountCountry = args.accountCountry;
   }

@@ -16,10 +16,21 @@ export interface CreateAssetParams {
   name: string;
   ticker?: string;
   description?: string;
+  maturityDate?: string;
+  faceValue?: number;
+}
+
+export interface UpdateAssetParams {
+  name: string;
+  ticker?: string;
+  description?: string;
+  maturityDate?: string;
+  faceValue?: number;
 }
 
 export interface AssetRepository {
   list(filter: ListAssetsFilter, session: SessionEntity): Promise<DataState<PaginatedData<AssetEntity>>>;
   create(params: CreateAssetParams, session: SessionEntity): Promise<DataState<AssetEntity>>;
+  update(id: string, params: UpdateAssetParams, session: SessionEntity): Promise<DataState<AssetEntity>>;
   delete(id: string, session: SessionEntity): Promise<DataState<void>>;
 }

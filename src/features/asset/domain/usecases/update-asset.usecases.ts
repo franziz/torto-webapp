@@ -1,13 +1,12 @@
 import { UseCase } from "@/core/resources/use-case";
 import { DataFailed, DataState } from "@/core/resources/data-state";
 import { AssetEntity } from "@/features/asset/domain/entities/asset";
-import { AssetRepository, CreateAssetParams } from "@/features/asset/domain/repositories/asset";
+import { AssetRepository, UpdateAssetParams } from "@/features/asset/domain/repositories/asset";
 import { SessionRepository } from "@/features/authentication/domain/repositories/session";
 import { ErrorCodes, ServerError } from "@/core/resources/server-error";
 
-export class CreateAssetUseCaseParams {
-  public accountId: string;
-  public assetTypeId: string;
+export class UpdateAssetUseCaseParams {
+  public id: string;
   public name: string;
   public ticker?: string;
   public description?: string;
@@ -15,16 +14,14 @@ export class CreateAssetUseCaseParams {
   public faceValue?: number;
 
   constructor(args: {
-    accountId: string;
-    assetTypeId: string;
+    id: string;
     name: string;
     ticker?: string;
     description?: string;
     maturityDate?: string;
     faceValue?: number;
   }) {
-    this.accountId = args.accountId;
-    this.assetTypeId = args.assetTypeId;
+    this.id = args.id;
     this.name = args.name;
     this.ticker = args.ticker;
     this.description = args.description;
@@ -33,25 +30,23 @@ export class CreateAssetUseCaseParams {
   }
 }
 
-export class CreateAssetUseCase implements UseCase<DataState<AssetEntity>, CreateAssetUseCaseParams> {
+export class UpdateAssetUseCase implements UseCase<DataState<AssetEntity>, UpdateAssetUseCaseParams> {
   constructor(
     private readonly assetRepository: AssetRepository,
     private readonly sessionRepository: SessionRepository,
   ) {}
 
-  public async execute(params: CreateAssetUseCaseParams): Promise<DataState<AssetEntity>> {
+  public async execute(params: UpdateAssetUseCaseParams): Promise<DataState<AssetEntity>> {
     try {
       const session = await this.retrieveSession();
-      const createParams: CreateAssetParams = {
-        accountId: params.accountId,
-        assetTypeId: params.assetTypeId,
+      const updateParams: UpdateAssetParams = {
         name: params.name,
         ticker: params.ticker,
         description: params.description,
         maturityDate: params.maturityDate,
         faceValue: params.faceValue,
       };
-      return this.assetRepository.create(createParams, session);
+      return this.assetRepository.update(params.id, updateParams, session);
     } catch (err) {
       if (err instanceof ServerError) return new DataFailed(err);
       else return new DataFailed(new ServerError(ErrorCodes.UNKNOWN, { error: err }));

@@ -9,6 +9,8 @@ interface AssetModelConstructor {
   name: string;
   ticker?: string;
   description?: string;
+  maturityDate?: string;
+  faceValue?: number;
   assetTypeCode?: string;
   assetTypeName?: string;
   accountName?: string;
@@ -25,6 +27,8 @@ export class AssetModel implements AbstractModel {
   public name: string;
   public ticker?: string;
   public description?: string;
+  public maturityDate?: string;
+  public faceValue?: number;
   public assetTypeCode?: string;
   public assetTypeName?: string;
   public accountName?: string;
@@ -40,6 +44,8 @@ export class AssetModel implements AbstractModel {
     this.name = args.name;
     this.ticker = args.ticker;
     this.description = args.description;
+    this.maturityDate = args.maturityDate;
+    this.faceValue = args.faceValue;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
     this.accountName = args.accountName;
@@ -57,6 +63,8 @@ export class AssetModel implements AbstractModel {
       name: doc["name"],
       ticker: doc["ticker"],
       description: doc["description"],
+      maturityDate: doc["maturity_date"] ?? undefined,
+      faceValue: doc["face_value"] != null ? Number(doc["face_value"]) : undefined,
       assetTypeCode: doc["asset_type_code"],
       assetTypeName: doc["asset_type_name"],
       accountName: doc["account_name"],
@@ -75,6 +83,8 @@ export class AssetModel implements AbstractModel {
       name: this.name,
       ticker: this.ticker,
       description: this.description,
+      maturityDate: this.maturityDate ? DateTime.fromISO(this.maturityDate) : undefined,
+      faceValue: this.faceValue,
       assetTypeCode: this.assetTypeCode,
       assetTypeName: this.assetTypeName,
       accountName: this.accountName,

@@ -2,6 +2,7 @@ import {
   AssetService,
   ListAssetsServiceFilter,
   CreateAssetServiceParams,
+  UpdateAssetServiceParams,
 } from "@/features/asset/domain/sources/asset";
 import { AssetModel } from "@/features/asset/data/models/asset";
 import { PaginationMetaModel } from "@/core/resources/pagination-meta-model";
@@ -55,11 +56,35 @@ export class AssetServiceImpl implements AssetService {
             name: params.name,
             ticker: params.ticker,
             description: params.description,
+            maturity_date: params.maturityDate ?? null,
+            face_value: params.faceValue ?? null,
           },
           session,
         },
 
       );
+
+      return AssetModel.fromJson(result.data);
+    } catch (err) {
+      if (err instanceof ServerError) throw err;
+      else throw new ServerError(ErrorCodes.UNKNOWN, { error: err });
+    }
+  }
+
+  public async update(id: string, params: UpdateAssetServiceParams, session: SessionEntity): Promise<AssetModel> {
+    try {
+      const result = await this.http.request({
+        path: `/api/assets/${id}`,
+        method: "PUT",
+        body: {
+          name: params.name,
+          ticker: params.ticker,
+          description: params.description,
+          maturity_date: params.maturityDate ?? null,
+          face_value: params.faceValue ?? null,
+        },
+        session,
+      });
 
       return AssetModel.fromJson(result.data);
     } catch (err) {

@@ -8,6 +8,8 @@ interface AssetEntityConstructor {
   name: string;
   ticker?: string;
   description?: string;
+  maturityDate?: DateTime;
+  faceValue?: number;
   assetTypeCode?: string;
   assetTypeName?: string;
   accountName?: string;
@@ -24,6 +26,8 @@ export class AssetEntity implements AbstractEntity {
   public name: string;
   public ticker?: string;
   public description?: string;
+  public maturityDate?: DateTime;
+  public faceValue?: number;
   public assetTypeCode?: string;
   public assetTypeName?: string;
   public accountName?: string;
@@ -39,6 +43,8 @@ export class AssetEntity implements AbstractEntity {
     this.name = args.name;
     this.ticker = args.ticker;
     this.description = args.description;
+    this.maturityDate = args.maturityDate;
+    this.faceValue = args.faceValue;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
     this.accountName = args.accountName;
