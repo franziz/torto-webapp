@@ -51,20 +51,16 @@ export const DEFAULT_FORM_CONFIG: FormFieldConfig = {
   priceLabel: "Price per Unit",
 };
 
-export const ASSET_TYPE_FORM_CONFIG: Record<string, FormFieldConfig> = {
-  stock: { showUnits: true, showPricePerUnit: true, unitsLabel: "Shares", priceLabel: "Price per Share" },
-  etf: { showUnits: true, showPricePerUnit: true, unitsLabel: "Shares", priceLabel: "Price per Share" },
-  crypto: { showUnits: true, showPricePerUnit: true, unitsLabel: "Units", priceLabel: "Price per Unit" },
-  mutual_fund: { showUnits: true, showPricePerUnit: true, unitsLabel: "Units", priceLabel: "NAV per Unit" },
-  cash: { showUnits: false, showPricePerUnit: false, unitsLabel: "Units", priceLabel: "Amount" },
-  time_deposit: { showUnits: false, showPricePerUnit: false, unitsLabel: "Units", priceLabel: "Amount" },
-  savings: { showUnits: false, showPricePerUnit: false, unitsLabel: "Units", priceLabel: "Amount" },
-  bond: { showUnits: true, showPricePerUnit: true, unitsLabel: "Face Value", priceLabel: "Price per Unit" },
+export const CATEGORY_FORM_CONFIG: Record<string, FormFieldConfig> = {
+  EQUITY: { showUnits: true, showPricePerUnit: true, unitsLabel: "Shares", priceLabel: "Price per Share" },
+  FUND: { showUnits: true, showPricePerUnit: true, unitsLabel: "Units", priceLabel: "NAV per Unit" },
+  FIXED_INCOME: { showUnits: true, showPricePerUnit: true, unitsLabel: "Face Value", priceLabel: "Price per Unit" },
+  CASH: { showUnits: false, showPricePerUnit: false, unitsLabel: "Units", priceLabel: "Amount" },
 };
 
-export function getFormConfig(assetTypeCode?: string): FormFieldConfig {
-  if (!assetTypeCode) return DEFAULT_FORM_CONFIG;
-  return ASSET_TYPE_FORM_CONFIG[assetTypeCode] ?? DEFAULT_FORM_CONFIG;
+export function getFormConfig(category?: string): FormFieldConfig {
+  if (!category) return DEFAULT_FORM_CONFIG;
+  return CATEGORY_FORM_CONFIG[category] ?? DEFAULT_FORM_CONFIG;
 }
 
 export type PositionActionType = Exclude<ActionType, "other">;
@@ -74,56 +70,46 @@ export interface PositionActionConfig {
   label: string;
 }
 
-export const ASSET_TYPE_ACTIONS: Record<string, PositionActionConfig[]> = {
-  stock: [
+export const CATEGORY_ACTIONS: Record<string, PositionActionConfig[]> = {
+  EQUITY: [
     { type: "buy", label: "Buy More" },
     { type: "sell", label: "Sell" },
     { type: "dividend", label: "Record Dividend" },
   ],
-  etf: [
+  FUND: [
     { type: "buy", label: "Buy More" },
     { type: "sell", label: "Sell" },
     { type: "dividend", label: "Record Dividend" },
   ],
-  mutual_fund: [
-    { type: "buy", label: "Buy More" },
-    { type: "sell", label: "Sell" },
-    { type: "dividend", label: "Record Dividend" },
-  ],
-  crypto: [
-    { type: "buy", label: "Buy More" },
-    { type: "sell", label: "Sell" },
-  ],
-  bond: [
+  FIXED_INCOME: [
     { type: "buy", label: "Buy More" },
     { type: "sell", label: "Sell" },
     { type: "interest", label: "Record Interest" },
     { type: "redemption", label: "Redeem" },
   ],
-  cash: [
+  CASH: [
     { type: "deposit", label: "Deposit" },
     { type: "sell", label: "Withdraw" },
     { type: "interest", label: "Record Interest" },
-  ],
-  savings: [
-    { type: "deposit", label: "Deposit" },
-    { type: "sell", label: "Withdraw" },
-    { type: "interest", label: "Record Interest" },
-  ],
-  time_deposit: [
-    { type: "interest", label: "Record Interest" },
-    { type: "redemption", label: "Redeem" },
   ],
 };
 
-export function getActionsForAssetType(
+export function getActionsForCategory(
+  category?: string,
   assetTypeCode?: string,
   redeemable?: { hasMaturityDate: boolean; hasFaceValue: boolean },
 ): PositionActionConfig[] {
-  if (!assetTypeCode) return [];
-  const actions = ASSET_TYPE_ACTIONS[assetTypeCode] ?? [];
-  if (!redeemable?.hasMaturityDate || !redeemable?.hasFaceValue) {
-    return actions.filter((a) => a.type !== "redemption");
+  if (!category) return [];
+  let actions = [...(CATEGORY_ACTIONS[category] ?? [])];
+
+  // TIME_DEPOSIT is CASH category but supports redemption
+  if (category === "CASH" && assetTypeCode === "TIME_DEPOSIT") {
+    actions.push({ type: "redemption", label: "Redeem" });
   }
+
+  if (!redeemable?.hasMaturityDate || !redeemable?.hasFaceValue) {
+    actions = actions.filter((a) => a.type !== "redemption");
+  }
+
   return actions;
 }

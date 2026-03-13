@@ -13,6 +13,7 @@ interface AssetModelConstructor {
   faceValue?: number;
   assetTypeCode?: string;
   assetTypeName?: string;
+  assetTypeCategory?: string;
   accountName?: string;
   accountCountry?: string;
   accountCurrency?: string;
@@ -31,6 +32,7 @@ export class AssetModel implements AbstractModel {
   public faceValue?: number;
   public assetTypeCode?: string;
   public assetTypeName?: string;
+  public assetTypeCategory?: string;
   public accountName?: string;
   public accountCountry?: string;
   public accountCurrency?: string;
@@ -48,6 +50,7 @@ export class AssetModel implements AbstractModel {
     this.faceValue = args.faceValue;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
+    this.assetTypeCategory = args.assetTypeCategory;
     this.accountName = args.accountName;
     this.accountCountry = args.accountCountry;
     this.accountCurrency = args.accountCurrency;
@@ -67,6 +70,7 @@ export class AssetModel implements AbstractModel {
       faceValue: doc["face_value"] != null ? Number(doc["face_value"]) : undefined,
       assetTypeCode: doc["asset_type_code"],
       assetTypeName: doc["asset_type_name"],
+      assetTypeCategory: doc["asset_type_category"],
       accountName: doc["account_name"],
       accountCountry: doc["account_country"],
       accountCurrency: doc["account_currency"],
@@ -87,6 +91,7 @@ export class AssetModel implements AbstractModel {
       faceValue: this.faceValue,
       assetTypeCode: this.assetTypeCode,
       assetTypeName: this.assetTypeName,
+      assetTypeCategory: this.assetTypeCategory,
       accountName: this.accountName,
       accountCountry: this.accountCountry,
       accountCurrency: this.accountCurrency,

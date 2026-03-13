@@ -12,6 +12,7 @@ interface AssetEntityConstructor {
   faceValue?: number;
   assetTypeCode?: string;
   assetTypeName?: string;
+  assetTypeCategory?: string;
   accountName?: string;
   accountCountry?: string;
   accountCurrency?: string;
@@ -30,6 +31,7 @@ export class AssetEntity implements AbstractEntity {
   public faceValue?: number;
   public assetTypeCode?: string;
   public assetTypeName?: string;
+  public assetTypeCategory?: string;
   public accountName?: string;
   public accountCountry?: string;
   public accountCurrency?: string;
@@ -47,6 +49,7 @@ export class AssetEntity implements AbstractEntity {
     this.faceValue = args.faceValue;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
+    this.assetTypeCategory = args.assetTypeCategory;
     this.accountName = args.accountName;
     this.accountCountry = args.accountCountry;
     this.accountCurrency = args.accountCurrency;

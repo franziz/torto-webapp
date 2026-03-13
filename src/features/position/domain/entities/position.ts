@@ -23,6 +23,7 @@ interface PositionEntityConstructor {
   assetTicker?: string;
   assetTypeCode?: string;
   assetTypeName?: string;
+  assetTypeCategory?: string;
   assetMaturityDate?: DateTime;
   assetFaceValue?: number;
   accountName?: string;
@@ -51,6 +52,7 @@ export class PositionEntity implements AbstractEntity {
   public assetTicker?: string;
   public assetTypeCode?: string;
   public assetTypeName?: string;
+  public assetTypeCategory?: string;
   public assetMaturityDate?: DateTime;
   public assetFaceValue?: number;
   public accountName?: string;
@@ -78,6 +80,7 @@ export class PositionEntity implements AbstractEntity {
     this.assetTicker = args.assetTicker;
     this.assetTypeCode = args.assetTypeCode;
     this.assetTypeName = args.assetTypeName;
+    this.assetTypeCategory = args.assetTypeCategory;
     this.assetMaturityDate = args.assetMaturityDate;
     this.assetFaceValue = args.assetFaceValue;
     this.accountName = args.accountName;
