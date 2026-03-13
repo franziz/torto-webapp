@@ -10,6 +10,7 @@ import { useCreateAsset } from "@/features/asset/presentation/hooks/use-create-a
 import { CreateAssetUseCaseParams } from "@/features/asset/domain/usecases/create-asset.usecases";
 import { TextInput } from "@/core/presentations/components/text-input";
 import { SelectInput } from "@/core/presentations/components/select-input";
+import { DateInput } from "@/core/presentations/components/date-input";
 import { FilledButton } from "@/core/presentations/components/filled-button";
 import { OutlinedButton } from "@/core/presentations/components/outlined-button";
 import { Spinner } from "@/core/presentations/components/spinner";
@@ -231,6 +232,8 @@ function AssetSearch({
   const [newTicker, setNewTicker] = useState("");
   const [newAccountId, setNewAccountId] = useState("");
   const [newAssetTypeId, setNewAssetTypeId] = useState("");
+  const [newMaturityDate, setNewMaturityDate] = useState("");
+  const [newFaceValue, setNewFaceValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
@@ -242,10 +245,23 @@ function AssetSearch({
     );
   }, [assets, search]);
 
+  const selectedAssetTypeCode = useMemo(() => {
+    if (!newAssetTypeId || !assetTypes) return "";
+    return assetTypes.find((t) => t.id === newAssetTypeId)?.code ?? "";
+  }, [newAssetTypeId, assetTypes]);
+
+  const showMaturityFields = selectedAssetTypeCode === "bond" || selectedAssetTypeCode === "time_deposit";
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     if (!newName || !newAccountId || !newAssetTypeId) return;
+
+    if (showMaturityFields && ((newMaturityDate && !newFaceValue) || (!newMaturityDate && newFaceValue))) {
+      setError("Maturity Date and Face Value must both be filled or both empty.");
+      return;
+    }
+
     try {
       const newAsset = await createAsset(
         new CreateAssetUseCaseParams({
@@ -253,6 +269,8 @@ function AssetSearch({
           assetTypeId: newAssetTypeId,
           name: newName,
           ticker: newTicker || undefined,
+          maturityDate: newMaturityDate || undefined,
+          faceValue: newFaceValue ? parseFloat(newFaceValue) : undefined,
         }),
       );
       if (newAsset) {
@@ -346,6 +364,22 @@ function AssetSearch({
             required
             placeholder="Select type"
           />
+          {showMaturityFields && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <DateInput
+                label="Maturity Date"
+                value={newMaturityDate}
+                onChange={setNewMaturityDate}
+              />
+              <TextInput
+                label="Face Value / Unit"
+                type="number"
+                value={newFaceValue}
+                onChange={setNewFaceValue}
+                placeholder="e.g. 1000000"
+              />
+            </div>
+          )}
           <div className="flex gap-x-3">
             <OutlinedButton type="button" onClick={() => setShowCreate(false)}>
               Cancel

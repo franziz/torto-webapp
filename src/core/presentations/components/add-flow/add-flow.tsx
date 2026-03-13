@@ -18,7 +18,7 @@ export function AddFlow(props: AddFlowProps) {
   const flow = useAddFlow();
 
   useEffect(() => {
-    if (props.open) flow.reset();
+    if (props.open) flow.reset(props.preset);
   }, [props.open]);
 
   const handleSuccess = () => {

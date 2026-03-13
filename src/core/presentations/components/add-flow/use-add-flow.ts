@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { DateTime } from "luxon";
 import { ActionType } from "@/core/resources/action-type-config";
-import { AddFlowState } from "@/core/presentations/components/add-flow/add-flow.types";
+import { AddFlowState, AddFlowPreset } from "@/core/presentations/components/add-flow/add-flow.types";
 
 const INITIAL_STATE: AddFlowState = {
   step: "action",
@@ -22,6 +22,19 @@ const INITIAL_STATE: AddFlowState = {
     notes: "",
   },
 };
+
+function buildPresetState(preset: AddFlowPreset): AddFlowState {
+  return {
+    step: "form",
+    data: {
+      ...INITIAL_STATE.data,
+      actionType: preset.actionType,
+      assetId: preset.assetId,
+      assetTypeCode: preset.assetTypeCode,
+      currency: preset.currency,
+    },
+  };
+}
 
 export function useAddFlow() {
   const [state, setState] = useState<AddFlowState>(INITIAL_STATE);
@@ -66,8 +79,8 @@ export function useAddFlow() {
     });
   }, []);
 
-  const reset = useCallback(() => {
-    setState(INITIAL_STATE);
+  const reset = useCallback((preset?: AddFlowPreset) => {
+    setState(preset ? buildPresetState(preset) : INITIAL_STATE);
   }, []);
 
   return {

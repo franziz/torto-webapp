@@ -22,8 +22,16 @@ export type AddFlowState = {
   data: AddFlowData;
 };
 
+export type AddFlowPreset = {
+  actionType: ActionType;
+  assetId: string;
+  assetTypeCode: string;
+  currency: string;
+};
+
 export type AddFlowProps = {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  preset?: AddFlowPreset;
 };

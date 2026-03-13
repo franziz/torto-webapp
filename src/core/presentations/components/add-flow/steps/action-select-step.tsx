@@ -8,6 +8,7 @@ import {
   BanknotesIcon,
   CurrencyDollarIcon,
   CalculatorIcon,
+  ArrowPathIcon,
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 
@@ -17,6 +18,7 @@ const ACTION_ICONS: Record<ActionType, React.ComponentType<{ className?: string 
   deposit: BanknotesIcon,
   dividend: CurrencyDollarIcon,
   interest: CalculatorIcon,
+  redemption: ArrowPathIcon,
   other: EllipsisHorizontalCircleIcon,
 };
 
