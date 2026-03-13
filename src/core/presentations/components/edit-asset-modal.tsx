@@ -17,6 +17,7 @@ export type EditAssetData = {
   ticker?: string;
   description?: string;
   assetTypeCode?: string;
+  assetTypeCategory?: string;
   maturityDate?: DateTime;
   faceValue?: number;
 };
@@ -37,7 +38,9 @@ export function EditAssetModal({ open, onClose, asset, onSuccess }: EditAssetMod
   const [maturityDate, setMaturityDate] = useState(asset.maturityDate?.toISODate() ?? "");
   const [faceValue, setFaceValue] = useState(asset.faceValue ? String(asset.faceValue) : "");
 
-  const showMaturityFields = asset.assetTypeCode === "bond" || asset.assetTypeCode === "time_deposit";
+  const showMaturityFields =
+    asset.assetTypeCategory === "FIXED_INCOME" ||
+    (asset.assetTypeCategory === "CASH" && asset.assetTypeCode === "TIME_DEPOSIT");
 
   useEffect(() => {
     if (open) {

@@ -10,7 +10,7 @@ import {
   CalculatorIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
-import { PositionActionType, PositionActionConfig, getActionsForAssetType } from "@/core/resources/action-type-config";
+import { PositionActionType, PositionActionConfig, getActionsForCategory } from "@/core/resources/action-type-config";
 
 const ACTION_ICONS: Record<PositionActionType, React.ComponentType<{ className?: string }>> = {
   buy: ShoppingCartIcon,
@@ -22,14 +22,15 @@ const ACTION_ICONS: Record<PositionActionType, React.ComponentType<{ className?:
 };
 
 type PositionActionMenuProps = {
+  assetTypeCategory?: string;
   assetTypeCode?: string;
   hasMaturityDate: boolean;
   hasFaceValue: boolean;
   onAction: (actionType: PositionActionType) => void;
 };
 
-export function PositionActionMenu({ assetTypeCode, hasMaturityDate, hasFaceValue, onAction }: PositionActionMenuProps) {
-  const actions = getActionsForAssetType(assetTypeCode, { hasMaturityDate, hasFaceValue });
+export function PositionActionMenu({ assetTypeCategory, assetTypeCode, hasMaturityDate, hasFaceValue, onAction }: PositionActionMenuProps) {
+  const actions = getActionsForCategory(assetTypeCategory, assetTypeCode, { hasMaturityDate, hasFaceValue });
 
   if (actions.length === 0) return null;
 
@@ -73,14 +74,15 @@ function PositionMenuItem({
 }
 
 type PositionActionButtonsProps = {
+  assetTypeCategory?: string;
   assetTypeCode?: string;
   hasMaturityDate: boolean;
   hasFaceValue: boolean;
   onAction: (actionType: PositionActionType) => void;
 };
 
-export function PositionActionButtons({ assetTypeCode, hasMaturityDate, hasFaceValue, onAction }: PositionActionButtonsProps) {
-  const actions = getActionsForAssetType(assetTypeCode, { hasMaturityDate, hasFaceValue });
+export function PositionActionButtons({ assetTypeCategory, assetTypeCode, hasMaturityDate, hasFaceValue, onAction }: PositionActionButtonsProps) {
+  const actions = getActionsForCategory(assetTypeCategory, assetTypeCode, { hasMaturityDate, hasFaceValue });
 
   if (actions.length === 0) return null;
 

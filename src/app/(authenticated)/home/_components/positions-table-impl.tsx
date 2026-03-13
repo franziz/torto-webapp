@@ -25,10 +25,13 @@ import { PositionActionType } from "@/core/resources/action-type-config";
 import { EditAssetModal, EditAssetData } from "@/core/presentations/components/edit-asset-modal";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 
-const FIXED_INCOME_TYPES = new Set(["bond", "time_deposit"]);
+function isRedeemableType(pos: PositionEntity): boolean {
+  return pos.assetTypeCategory === "FIXED_INCOME" ||
+    (pos.assetTypeCategory === "CASH" && pos.assetTypeCode === "TIME_DEPOSIT");
+}
 
 function isIncompleteFixedIncome(pos: PositionEntity): boolean {
-  if (!pos.assetTypeCode || !FIXED_INCOME_TYPES.has(pos.assetTypeCode)) return false;
+  if (!isRedeemableType(pos)) return false;
   return pos.assetMaturityDate == null || pos.assetFaceValue == null;
 }
 
@@ -38,6 +41,7 @@ function positionToEditAssetData(pos: PositionEntity): EditAssetData {
     name: pos.assetName ?? "",
     ticker: pos.assetTicker,
     assetTypeCode: pos.assetTypeCode,
+    assetTypeCategory: pos.assetTypeCategory,
     maturityDate: pos.assetMaturityDate,
     faceValue: pos.assetFaceValue,
   };
@@ -100,6 +104,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
       actionType,
       assetId: pos.assetId,
       assetTypeCode: pos.assetTypeCode ?? "",
+      assetTypeCategory: pos.assetTypeCategory ?? "",
       currency: pos.currency,
     });
     setAddFlowOpen(true);
@@ -281,6 +286,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
               )}
 
               <PositionActionButtons
+                assetTypeCategory={selectedPosition.assetTypeCategory}
                 assetTypeCode={selectedPosition.assetTypeCode}
                 hasMaturityDate={!!selectedPosition.assetMaturityDate}
                 hasFaceValue={selectedPosition.assetFaceValue != null && selectedPosition.assetFaceValue > 0}
@@ -393,6 +399,7 @@ export function PositionsTableImpl({ filterCurrency }: PositionsTableImplProps) 
                     {
                       node: (
                         <PositionActionMenu
+                          assetTypeCategory={pos.assetTypeCategory}
                           assetTypeCode={pos.assetTypeCode}
                           hasMaturityDate={!!pos.assetMaturityDate}
                           hasFaceValue={pos.assetFaceValue != null && pos.assetFaceValue > 0}

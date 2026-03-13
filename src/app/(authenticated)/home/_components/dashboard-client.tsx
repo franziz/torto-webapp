@@ -8,6 +8,7 @@ import { PortfolioSummaryImpl } from "@/app/(authenticated)/home/_components/por
 import { PortfolioBreakdownImpl } from "@/app/(authenticated)/home/_components/portfolio-breakdown-impl";
 import { PositionsTableImpl } from "@/app/(authenticated)/home/_components/positions-table-impl";
 import { AddTransactionButton } from "@/app/(authenticated)/home/_components/add-transaction-button";
+import { IncompleteDataBanner } from "@/app/(authenticated)/home/_components/incomplete-data-banner";
 
 export function DashboardClient() {
   const {
@@ -25,6 +26,7 @@ export function DashboardClient() {
 
   return (
     <div className="space-y-6">
+      <IncompleteDataBanner />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <CurrencyTabs
           currencies={nativeCurrencies}

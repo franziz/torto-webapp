@@ -21,7 +21,7 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 
 type AssetSelectStepProps = {
   actionType: ActionType;
-  onSelect: (params: { assetId: string; assetTypeCode: string; currency: string; accountId?: string }) => void;
+  onSelect: (params: { assetId: string; assetTypeCode: string; assetTypeCategory: string; currency: string; accountId?: string }) => void;
   onBack: () => void;
 };
 
@@ -54,22 +54,23 @@ function DepositAccountSelect({
     if (!account) return;
 
     const cashAsset = assets?.find(
-      (a) => a.accountId === accountId && (a.assetTypeCode === "cash" || a.assetTypeCode === "savings"),
+      (a) => a.accountId === accountId && a.assetTypeCategory === "CASH",
     );
 
     if (cashAsset) {
       onSelect({
         assetId: cashAsset.id,
-        assetTypeCode: cashAsset.assetTypeCode ?? "cash",
+        assetTypeCode: cashAsset.assetTypeCode ?? "CASH",
+        assetTypeCategory: cashAsset.assetTypeCategory ?? "CASH",
         currency: account.currency,
         accountId,
       });
       return;
     }
 
-    const cashType = assetTypes?.find((t) => t.code === "cash");
+    const cashType = assetTypes?.find((t) => t.category === "CASH");
     if (!cashType) {
-      setError("No 'cash' asset type found. Please create one in Settings.");
+      setError("No cash asset type found. Please create one in Settings.");
       return;
     }
 
@@ -84,7 +85,8 @@ function DepositAccountSelect({
       if (newAsset) {
         onSelect({
           assetId: newAsset.id,
-          assetTypeCode: "cash",
+          assetTypeCode: newAsset.assetTypeCode ?? "CASH",
+          assetTypeCategory: newAsset.assetTypeCategory ?? "CASH",
           currency: account.currency,
           accountId,
         });
@@ -188,6 +190,7 @@ function HoldingSelect({
                 onSelect({
                   assetId: pos.assetId,
                   assetTypeCode: pos.assetTypeCode ?? "",
+                  assetTypeCategory: pos.assetTypeCategory ?? "",
                   currency: pos.currency,
                 })
               }
@@ -245,12 +248,14 @@ function AssetSearch({
     );
   }, [assets, search]);
 
-  const selectedAssetTypeCode = useMemo(() => {
-    if (!newAssetTypeId || !assetTypes) return "";
-    return assetTypes.find((t) => t.id === newAssetTypeId)?.code ?? "";
+  const selectedAssetType = useMemo(() => {
+    if (!newAssetTypeId || !assetTypes) return null;
+    return assetTypes.find((t) => t.id === newAssetTypeId) ?? null;
   }, [newAssetTypeId, assetTypes]);
 
-  const showMaturityFields = selectedAssetTypeCode === "bond" || selectedAssetTypeCode === "time_deposit";
+  const showMaturityFields =
+    selectedAssetType?.category === "FIXED_INCOME" ||
+    (selectedAssetType?.category === "CASH" && selectedAssetType?.code === "TIME_DEPOSIT");
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -278,6 +283,7 @@ function AssetSearch({
         onSelect({
           assetId: newAsset.id,
           assetTypeCode: newAsset.assetTypeCode ?? "",
+          assetTypeCategory: newAsset.assetTypeCategory ?? "",
           currency: account?.currency ?? "",
           accountId: newAccountId,
         });
@@ -314,6 +320,7 @@ function AssetSearch({
                   onSelect({
                     assetId: asset.id,
                     assetTypeCode: asset.assetTypeCode ?? "",
+                    assetTypeCategory: asset.assetTypeCategory ?? "",
                     currency: asset.accountCurrency ?? "",
                     accountId: asset.accountId,
                   })

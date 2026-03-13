@@ -13,6 +13,7 @@ const INITIAL_STATE: AddFlowState = {
     accountCurrency: "",
     assetId: "",
     assetTypeCode: "",
+    assetTypeCategory: "",
     transactionTypeId: "",
     units: "",
     pricePerUnit: "",
@@ -31,6 +32,7 @@ function buildPresetState(preset: AddFlowPreset): AddFlowState {
       actionType: preset.actionType,
       assetId: preset.assetId,
       assetTypeCode: preset.assetTypeCode,
+      assetTypeCategory: preset.assetTypeCategory,
       currency: preset.currency,
     },
   };
@@ -48,7 +50,7 @@ export function useAddFlow() {
   }, []);
 
   const selectAsset = useCallback(
-    (params: { assetId: string; assetTypeCode: string; currency: string; accountId?: string }) => {
+    (params: { assetId: string; assetTypeCode: string; assetTypeCategory: string; currency: string; accountId?: string }) => {
       setState((prev) => ({
         ...prev,
         step: "form",
@@ -56,6 +58,7 @@ export function useAddFlow() {
           ...prev.data,
           assetId: params.assetId,
           assetTypeCode: params.assetTypeCode,
+          assetTypeCategory: params.assetTypeCategory,
           currency: params.currency,
           accountId: params.accountId ?? prev.data.accountId,
         },

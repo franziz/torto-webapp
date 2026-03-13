@@ -15,6 +15,7 @@ import { ErrorDisplay } from "@/core/presentations/components/error-display";
 import { formatCurrency, formatCompactCurrency } from "@/core/helpers/format-currency";
 import { getExchangeRate } from "@/core/helpers/get-exchange-rate";
 import { useCurrencySelector } from "@/core/presentations/hooks/use-currency-selector";
+import { IncompleteDataBanner } from "@/app/(authenticated)/home/_components/incomplete-data-banner";
 
 export function MobileDashboard() {
   const {
@@ -146,6 +147,7 @@ export function MobileDashboard() {
 
   return (
     <div className="space-y-6">
+      <IncompleteDataBanner />
       {/* Hero */}
       <div className="px-1">
         {hero ? (

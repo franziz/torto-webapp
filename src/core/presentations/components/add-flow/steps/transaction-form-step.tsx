@@ -28,7 +28,7 @@ export function TransactionFormStep({ data, onFieldChange, onBack, onSuccess }: 
   const [error, setError] = useState<string | null>(null);
   const [lastEdited, setLastEdited] = useState<"units" | "pricePerUnit" | "totalAmount">("units");
 
-  const formConfig = getFormConfig(data.assetTypeCode);
+  const formConfig = getFormConfig(data.assetTypeCategory);
   const isOther = data.actionType === "other";
 
   const resolvedTransactionTypeId = useMemo(() => {

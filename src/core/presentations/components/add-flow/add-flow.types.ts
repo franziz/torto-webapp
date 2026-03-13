@@ -8,6 +8,7 @@ export type AddFlowData = {
   accountCurrency: string;
   assetId: string;
   assetTypeCode: string;
+  assetTypeCategory: string;
   transactionTypeId: string;
   units: string;
   pricePerUnit: string;
@@ -26,6 +27,7 @@ export type AddFlowPreset = {
   actionType: ActionType;
   assetId: string;
   assetTypeCode: string;
+  assetTypeCategory: string;
   currency: string;
 };
 
